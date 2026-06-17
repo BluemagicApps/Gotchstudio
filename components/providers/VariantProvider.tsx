@@ -34,16 +34,11 @@ export const useVariant = () => useContext(VariantContext);
  * already baked into globals.css, so non-default variants simply override them.
  */
 export function VariantProvider({ children }: { children: React.ReactNode }) {
+  // Locked to the default variant (Minimal Maximalist). The live switcher has
+  // been removed, so no persisted preference is read — every visitor gets the
+  // same theme regardless of any value left in localStorage by older builds.
   const [variant, setVariantState] = useState<VariantId>(defaultVariant);
   const { resolvedTheme } = useTheme();
-
-  // Restore persisted variant on mount.
-  useEffect(() => {
-    const stored = window.localStorage.getItem(
-      VARIANT_STORAGE_KEY,
-    ) as VariantId | null;
-    if (stored && variants[stored]) setVariantState(stored);
-  }, []);
 
   // Apply tokens for the active variant + theme.
   useEffect(() => {

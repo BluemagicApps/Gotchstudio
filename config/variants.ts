@@ -292,7 +292,7 @@ export const variants: Record<VariantId, Variant> = {
 };
 
 export const variantList = Object.values(variants);
-export const defaultVariant: VariantId = "editorial";
+export const defaultVariant: VariantId = "minimal";
 
 /** Serialize a token set into a CSS string for inline `style` injection. */
 export function tokensToCss(tokens: VariantTokens): Record<string, string> {

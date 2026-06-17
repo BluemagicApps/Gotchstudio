@@ -7,7 +7,6 @@ import { mainNav } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { VariantSwitcher } from "./VariantSwitcher";
 import { MobileNav } from "./MobileNav";
 import { Button } from "@/components/ui/button";
 
@@ -39,7 +38,7 @@ export function Header() {
         {/* Logo */}
         <Link
           href="/"
-          className="font-serif text-xl font-light tracking-[0.12em] sm:text-2xl"
+          className="font-serif text-2xl font-semibold uppercase leading-none tracking-[0.2em] drop-shadow-sm transition-colors hover:text-accent sm:text-3xl lg:text-[2rem]"
         >
           GOTCH<span className="text-accent">.</span>STUDIO
         </Link>
@@ -67,7 +66,6 @@ export function Header() {
 
         {/* Controls */}
         <div className="flex items-center gap-0.5 sm:gap-1">
-          <VariantSwitcher />
           <LanguageSwitcher />
           <ThemeToggle />
           <Button asChild size="sm" className="ml-2 hidden xl:inline-flex">
