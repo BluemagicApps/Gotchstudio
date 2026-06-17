@@ -76,7 +76,7 @@ export const shopItems: ShopItem[] = [
     maker: "Atelier Noir",
     price: 1740,
     currency: "USD",
-    image: U("photo-1543198126-c8d9a1f8e6f0"),
+    image: U("photo-1540932239986-30128078f3c5"),
     description: "A quietly dramatic arc in patinated brass with a hand-stitched leather switch.",
   },
   {

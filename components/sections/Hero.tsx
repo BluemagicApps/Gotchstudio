@@ -11,9 +11,9 @@ import { variants } from "@/config/variants";
 import { cn } from "@/lib/utils";
 
 const HERO_IMG =
-  "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2400&q=80";
+  "https://images.unsplash.com/photo-1618219740975-d40978bb7378?auto=format&fit=crop&w=2400&q=80";
 const HERO_IMG_2 =
-  "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1400&q=80";
+  "https://images.unsplash.com/photo-1615875605825-5eb9bb5d52ac?auto=format&fit=crop&w=1400&q=80";
 const HERO_IMG_3 =
   "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1400&q=80";
 
