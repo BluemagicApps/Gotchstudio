@@ -12,6 +12,8 @@ export function SmartImage({
   className,
   wrapperClassName,
   alt,
+  priority,
+  loading,
   ...props
 }: ImageProps & { wrapperClassName?: string }) {
   const [loaded, setLoaded] = useState(false);
@@ -20,7 +22,10 @@ export function SmartImage({
       {!loaded && <div className="absolute inset-0 skeleton" aria-hidden />}
       <Image
         alt={alt}
-        loading="lazy"
+        priority={priority}
+        // `priority` and `loading` are mutually exclusive in next/image; only
+        // default to lazy when the caller hasn't marked the image as priority.
+        loading={loading ?? (priority ? undefined : "lazy")}
         onLoad={() => setLoaded(true)}
         className={cn(
           "transition-opacity duration-700",
