@@ -1,0 +1,346 @@
+{
+  "common": {
+    "toggleTheme": "Toggle light and dark mode",
+    "bookConsultation": "Book a Consultation",
+    "getInTouch": "Get in Touch",
+    "viewProject": "View Project",
+    "viewAll": "View All",
+    "explore": "Explore",
+    "learnMore": "Learn More",
+    "readMore": "Read More",
+    "backTo": "Back to",
+    "loading": "Loading",
+    "demoBadge": "Interactive Demo"
+  },
+  "nav": {
+    "about": "About",
+    "services": "Services",
+    "portfolio": "Portfolio",
+    "journal": "Journal",
+    "aiStudio": "AI Studio",
+    "shop": "Shop",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "footer": {
+    "blurb": "An award-winning interior design studio crafting timeless, wellness-led luxury interiors since 2002.",
+    "newsletter": "Join our world",
+    "studio": "Studio",
+    "work": "Work",
+    "visit": "Visit",
+    "rights": "All rights reserved.",
+    "credit": "Designed & built with care."
+  },
+  "newsletter": {
+    "placeholder": "Your email address",
+    "submit": "Subscribe",
+    "success": "Welcome — please check your inbox to confirm."
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Interior Design · Est. 2002 · Jersey City",
+      "title": "Timeless interiors, thoughtfully made.",
+      "subtitle": "Gotch Studio designs serene, wellness-led luxury homes and spaces across all 50 states and around the world.",
+      "ctaPrimary": "Begin Your Project",
+      "ctaSecondary": "View Our Work",
+      "scroll": "Scroll to explore"
+    },
+    "about": {
+      "eyebrow": "The Studio",
+      "title": "Design that quietly improves the way you live.",
+      "body1": "Founded in 2002 in Jersey City, New Jersey, Gotch Studio creates interiors that feel collected, calm, and deeply personal. We believe luxury is measured not in excess, but in how a space makes you feel the moment you walk in.",
+      "body2": "From riverfront lofts to Mediterranean retreats, our full-service practice blends European refinement, the science of well-being, and a reverence for natural materials and craft.",
+      "cta": "Our Story",
+      "stats": {
+        "years": "Years of practice",
+        "projects": "Projects delivered",
+        "countries": "Countries served",
+        "awards": "Industry awards"
+      }
+    },
+    "services": {
+      "eyebrow": "What We Do",
+      "title": "A complete, considered design practice.",
+      "intro": "From first sketch to final styled detail, we manage every dimension of your project with rigor and warmth.",
+      "cta": "All Services"
+    },
+    "featured": {
+      "eyebrow": "Selected Work",
+      "title": "Spaces with a story.",
+      "intro": "A glimpse of recent projects from New Jersey to the Mediterranean and beyond.",
+      "cta": "View Full Portfolio"
+    },
+    "ai": {
+      "eyebrow": "Gotch AI Studio",
+      "title": "See your space reimagined — instantly.",
+      "intro": "Explore our signature aesthetics in your own room, discover your design profile, and build a shareable moodboard. Then bring it to life with our team.",
+      "cta": "Open the AI Studio",
+      "tool1": "Room Visualizer",
+      "tool2": "Style Quiz",
+      "tool3": "Moodboard Generator"
+    },
+    "testimonials": {
+      "eyebrow": "In Their Words",
+      "title": "Clients who never want to leave."
+    },
+    "journal": {
+      "eyebrow": "The Journal",
+      "title": "Insights on living beautifully.",
+      "cta": "Read the Journal"
+    },
+    "cta": {
+      "title": "Let's create something timeless.",
+      "body": "Tell us about your space and your vision. We work with a limited number of clients each year to ensure every project receives our full attention.",
+      "button": "Start the Conversation"
+    }
+  },
+  "about": {
+    "meta": {
+      "title": "About — Gotch Studio",
+      "description": "Founded in 2002 in Jersey City, Gotch Studio is an award-winning interior design firm working across the US and internationally."
+    },
+    "hero": {
+      "eyebrow": "About the Studio",
+      "title": "Two decades of timeless design.",
+      "intro": "Since 2002, we have shaped homes and spaces that balance beauty, well-being, and a quiet sense of permanence."
+    },
+    "story": {
+      "eyebrow": "Our Story",
+      "title": "From a small Jersey City studio to a global practice.",
+      "body1": "Gotch Studio began in 2002 with a single conviction: that thoughtful design can measurably improve daily life. What started as a boutique practice on the Hudson has grown into an internationally recognized firm working across all 50 states and on four continents.",
+      "body2": "Through every project, our philosophy has stayed constant — listen deeply, design with restraint, and craft interiors meant to be loved for decades, not seasons.",
+      "body3": "Today our multidisciplinary team brings together interior architecture, neuroaesthetics, sustainability, and a global network of artisans under one roof."
+    },
+    "philosophy": {
+      "eyebrow": "Our Philosophy",
+      "title": "Three principles guide everything we make.",
+      "items": {
+        "sustainability": {
+          "title": "Sustainability",
+          "body": "We design to endure — favoring natural, healthy materials, vintage sourcing, and craftsmanship built to be repaired rather than replaced."
+        },
+        "wellness": {
+          "title": "Wellness",
+          "body": "Drawing on neuroaesthetics, we tune light, air, acoustics, and materiality to how spaces actually make you feel."
+        },
+        "timeless": {
+          "title": "Timeless Luxury",
+          "body": "We design beyond trend — coherent, personal interiors that look as right in twenty years as they do today."
+        }
+      }
+    },
+    "team": {
+      "eyebrow": "The Team",
+      "title": "The people behind the work.",
+      "intro": "A close-knit, multidisciplinary team united by craft and care."
+    },
+    "awards": {
+      "eyebrow": "Recognition",
+      "title": "Awards & honors.",
+      "pressTitle": "In the press"
+    }
+  },
+  "services": {
+    "meta": {
+      "title": "Services — Gotch Studio",
+      "description": "Full-service interior design: residential, commercial, new build, renovation, kitchen & bath, furnishings, e-design, and AI-enhanced design."
+    },
+    "hero": {
+      "eyebrow": "Services",
+      "title": "Full-service design, end to end.",
+      "intro": "Whether you need a complete home transformation or focused guidance, we meet you where you are — with the same standard of care."
+    },
+    "process": {
+      "eyebrow": "How We Work",
+      "title": "A clear, collaborative process.",
+      "intro": "Six considered phases take your project from first conversation to a home you never want to leave."
+    },
+    "cta": {
+      "title": "Not sure which service fits?",
+      "body": "Book a consultation and we'll guide you to the right path for your space, timeline, and budget.",
+      "button": "Book a Consultation"
+    }
+  },
+  "portfolio": {
+    "meta": {
+      "title": "Portfolio — Gotch Studio",
+      "description": "Explore award-winning interior design projects by Gotch Studio across the US, Europe, the Middle East, and Asia."
+    },
+    "hero": {
+      "eyebrow": "Portfolio",
+      "title": "A collected body of work.",
+      "intro": "Filter by style, type, or location to explore projects from Jersey City to Kyoto."
+    },
+    "filters": {
+      "all": "All",
+      "style": "Style",
+      "type": "Type",
+      "search": "Search projects",
+      "empty": "No projects match your filters yet.",
+      "clear": "Clear filters"
+    },
+    "project": {
+      "overview": "Overview",
+      "scope": "Scope of work",
+      "details": "Project details",
+      "location": "Location",
+      "year": "Year",
+      "style": "Style",
+      "type": "Type",
+      "gallery": "Gallery",
+      "beforeAfter": "Before & After",
+      "story": "The story",
+      "next": "Next project",
+      "view360": "360° view coming soon",
+      "cta": "Start a project like this"
+    }
+  },
+  "journal": {
+    "meta": {
+      "title": "Journal — Gotch Studio",
+      "description": "Insights on wellness design, timeless interiors, sustainability, and the craft of living beautifully."
+    },
+    "hero": {
+      "eyebrow": "Journal",
+      "title": "Insights on living beautifully.",
+      "intro": "Essays on wellness, craft, and the art of designing interiors that last."
+    },
+    "post": {
+      "by": "By",
+      "minRead": "min read",
+      "share": "Share",
+      "related": "Related reading",
+      "back": "All articles"
+    }
+  },
+  "ai": {
+    "meta": {
+      "title": "AI Studio — Gotch Studio",
+      "description": "Reimagine your space with the Gotch AI Studio: room visualizer, style quiz, and moodboard generator."
+    },
+    "hero": {
+      "eyebrow": "Gotch AI Studio",
+      "title": "Design intelligence, the Gotch way.",
+      "intro": "A suite of AI tools to explore your space, discover your aesthetic, and collaborate with our designers. These are interactive demos — your chosen direction is brought to life by our team with real materials."
+    },
+    "visualizer": {
+      "title": "AI Room Visualizer",
+      "intro": "Upload a photo, floor plan, or sketch and preview it in our signature styles.",
+      "upload": "Upload your room",
+      "dragDrop": "Drag & drop or click to upload",
+      "chooseStyle": "Choose a style",
+      "generate": "Generate redesign",
+      "generating": "Reimagining your space…",
+      "result": "Your reimagined space",
+      "reset": "Try another",
+      "note": "Demo output uses curated reference imagery. Connect Replicate or Hugging Face for live generation."
+    },
+    "quiz": {
+      "title": "Style Quiz",
+      "intro": "Answer a few questions to discover your design profile.",
+      "start": "Start the quiz",
+      "next": "Next",
+      "back": "Back",
+      "result": "Your style profile",
+      "retake": "Retake quiz",
+      "yourStyle": "You lean"
+    },
+    "moodboard": {
+      "title": "Moodboard Generator",
+      "intro": "Build and share a moodboard from your style profile.",
+      "generate": "Generate moodboard",
+      "share": "Copy share link",
+      "copied": "Link copied"
+    },
+    "more": {
+      "title": "Also in development",
+      "staging": "Virtual Staging",
+      "stagingDesc": "Furnish empty rooms instantly for listings and previews.",
+      "viewer": "3D Walkthroughs",
+      "viewerDesc": "Immersive 3D and 360° tours of proposed designs.",
+      "chatbot": "Design Concierge",
+      "chatbotDesc": "An AI assistant to answer questions and guide inquiries."
+    }
+  },
+  "shop": {
+    "meta": {
+      "title": "Shop — Gotch Studio",
+      "description": "A curated collection of custom furnishings, lighting, and objects from Gotch Studio and our maker partners."
+    },
+    "hero": {
+      "eyebrow": "The Shop",
+      "title": "Curated pieces, made to last.",
+      "intro": "A small, evolving collection of custom and sourced furnishings we love. Trade inquiries welcome."
+    },
+    "filters": { "all": "All" },
+    "item": {
+      "by": "By",
+      "inquire": "Inquire to purchase",
+      "note": "Shop is a preview. Connect a commerce backend to enable checkout."
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact — Gotch Studio",
+      "description": "Begin your project with Gotch Studio. Visit our Jersey City studio or work with us remotely, anywhere in the world."
+    },
+    "hero": {
+      "eyebrow": "Contact",
+      "title": "Let's begin.",
+      "intro": "Tell us about your space and your vision. We respond to every inquiry personally within two business days."
+    },
+    "form": {
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone (optional)",
+      "location": "Project location",
+      "type": "Project type",
+      "budget": "Estimated budget",
+      "message": "Tell us about your project",
+      "submit": "Send Inquiry",
+      "sending": "Sending…",
+      "success": "Thank you — we'll be in touch within two business days.",
+      "error": "Something went wrong. Please email us directly.",
+      "selectType": "Select a type",
+      "selectBudget": "Select a range"
+    },
+    "info": {
+      "studio": "The Studio",
+      "email": "Email",
+      "phone": "Phone",
+      "hours": "Hours",
+      "hoursValue": "Monday–Friday, 9am–6pm ET",
+      "global": "Working globally",
+      "globalValue": "On-site across all 50 states; remote and travel worldwide."
+    },
+    "booking": {
+      "title": "Or book a consultation",
+      "intro": "Reserve a 60-minute virtual or in-studio session with one of our designers.",
+      "selectDate": "Select a date",
+      "selectTime": "Select a time",
+      "confirm": "Request this slot",
+      "confirmed": "Requested — we'll confirm by email."
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "updated": "Last updated June 2026"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "updated": "Last updated June 2026"
+    }
+  },
+  "chatbot": {
+    "title": "Design Concierge",
+    "welcome": "Hello! I'm the Gotch Studio concierge. How can I help you today?",
+    "placeholder": "Ask about services, process, or pricing…",
+    "send": "Send",
+    "disclaimer": "Demo assistant — connect the Claude API for live responses.",
+    "suggest1": "What services do you offer?",
+    "suggest2": "How does your process work?",
+    "suggest3": "Do you work internationally?"
+  }
+}

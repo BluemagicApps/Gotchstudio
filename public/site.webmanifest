@@ -1,0 +1,12 @@
+{
+  "name": "Gotch Studio",
+  "short_name": "Gotch",
+  "description": "Timeless, wellness-led luxury interior design since 2002.",
+  "start_url": "/en/",
+  "display": "standalone",
+  "background_color": "#f4efe6",
+  "theme_color": "#171513",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

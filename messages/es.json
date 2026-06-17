@@ -1,0 +1,52 @@
+{
+  "common": {
+    "toggleTheme": "Alternar modo claro y oscuro",
+    "bookConsultation": "Reservar una consulta",
+    "getInTouch": "Contáctanos",
+    "viewProject": "Ver proyecto",
+    "viewAll": "Ver todo",
+    "explore": "Explorar",
+    "learnMore": "Saber más",
+    "readMore": "Leer más",
+    "demoBadge": "Demo interactiva"
+  },
+  "nav": {
+    "about": "Estudio",
+    "services": "Servicios",
+    "portfolio": "Portafolio",
+    "journal": "Diario",
+    "aiStudio": "Estudio IA",
+    "shop": "Tienda",
+    "contact": "Contacto",
+    "privacy": "Privacidad",
+    "terms": "Términos"
+  },
+  "footer": {
+    "blurb": "Un estudio de diseño de interiores galardonado que crea interiores de lujo atemporales y centrados en el bienestar desde 2002.",
+    "newsletter": "Únete a nuestro mundo",
+    "studio": "Estudio",
+    "work": "Trabajo",
+    "visit": "Visítanos",
+    "rights": "Todos los derechos reservados."
+  },
+  "newsletter": {
+    "placeholder": "Tu correo electrónico",
+    "submit": "Suscribirse",
+    "success": "Bienvenido — revisa tu bandeja para confirmar."
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Diseño de interiores · Desde 2002 · Jersey City",
+      "title": "Interiores atemporales, hechos con intención.",
+      "subtitle": "Gotch Studio diseña hogares y espacios de lujo serenos y centrados en el bienestar en los 50 estados y en todo el mundo.",
+      "ctaPrimary": "Comenzar tu proyecto",
+      "ctaSecondary": "Ver nuestro trabajo",
+      "scroll": "Desplázate para explorar"
+    },
+    "cta": {
+      "title": "Creemos algo atemporal.",
+      "body": "Cuéntanos sobre tu espacio y tu visión. Trabajamos con un número limitado de clientes cada año.",
+      "button": "Iniciar la conversación"
+    }
+  }
+}

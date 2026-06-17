@@ -1,0 +1,17 @@
+{
+  "name": "gotchstudio-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Optional Express API for Gotch Studio (inquiries, newsletter, bookings).",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node index.mjs",
+    "dev": "node --watch index.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

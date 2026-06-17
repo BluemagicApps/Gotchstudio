@@ -1,0 +1,110 @@
+// Gotch Studio data model.
+//
+// The first deliverable ships with typed static data in /data, so this schema
+// is the documented upgrade path: run `npx prisma generate && npx prisma db push`
+// to create a local SQLite database, then progressively move /data reads and the
+// contact/newsletter/booking handlers over to Prisma.
+//
+// To use Postgres (Supabase) or MySQL (PlanetScale) instead, change `provider`
+// and `url` below and adjust a few field types (e.g. enums) — see DEPLOYMENT.md.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL") // e.g. "file:./gotch.db"
+}
+
+model Project {
+  id          String         @id @default(cuid())
+  slug        String         @unique
+  title       String
+  location    String
+  country     String
+  year        Int
+  style       String
+  type        String
+  summary     String
+  story       String // JSON-encoded string[]
+  scope       String // JSON-encoded string[]
+  heroUrl     String
+  heroAlt     String
+  featured    Boolean        @default(false)
+  images      ProjectImage[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model ProjectImage {
+  id        String  @id @default(cuid())
+  url       String
+  alt       String
+  sort      Int     @default(0)
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+}
+
+model JournalPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  category    String
+  author      String
+  body        String // JSON-encoded string[] (or migrate to MDX)
+  coverUrl    String
+  readingTime Int
+  publishedAt DateTime
+  createdAt   DateTime @default(now())
+}
+
+model TeamMember {
+  id    String @id @default(cuid())
+  name  String
+  role  String
+  bio   String
+  photo String
+  sort  Int    @default(0)
+}
+
+model Inquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  location  String?
+  type      String?
+  budget    String?
+  message   String
+  status    String   @default("new") // new | contacted | won | archived
+  createdAt DateTime @default(now())
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  locale    String   @default("en")
+  confirmed Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Consultation {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?
+  date      DateTime
+  slot      String
+  mode      String   @default("virtual") // virtual | in-studio
+  status    String   @default("requested") // requested | confirmed | cancelled
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("client") // client | admin
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,52 @@
+{
+  "common": {
+    "toggleTheme": "Alternar modo claro e escuro",
+    "bookConsultation": "Agendar uma consulta",
+    "getInTouch": "Fale conosco",
+    "viewProject": "Ver projeto",
+    "viewAll": "Ver tudo",
+    "explore": "Explorar",
+    "learnMore": "Saiba mais",
+    "readMore": "Leia mais",
+    "demoBadge": "Demonstração interativa"
+  },
+  "nav": {
+    "about": "Estúdio",
+    "services": "Serviços",
+    "portfolio": "Portfólio",
+    "journal": "Diário",
+    "aiStudio": "Estúdio IA",
+    "shop": "Loja",
+    "contact": "Contato",
+    "privacy": "Privacidade",
+    "terms": "Termos"
+  },
+  "footer": {
+    "blurb": "Um premiado estúdio de design de interiores que cria interiores de luxo atemporais e focados no bem-estar desde 2002.",
+    "newsletter": "Junte-se ao nosso mundo",
+    "studio": "Estúdio",
+    "work": "Trabalhos",
+    "visit": "Visite-nos",
+    "rights": "Todos os direitos reservados."
+  },
+  "newsletter": {
+    "placeholder": "Seu endereço de e-mail",
+    "submit": "Assinar",
+    "success": "Bem-vindo — confira sua caixa de entrada para confirmar."
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Design de interiores · Desde 2002 · Jersey City",
+      "title": "Interiores atemporais, feitos com intenção.",
+      "subtitle": "A Gotch Studio cria casas e espaços de luxo serenos e voltados ao bem-estar em todos os 50 estados e no mundo todo.",
+      "ctaPrimary": "Iniciar seu projeto",
+      "ctaSecondary": "Ver nosso trabalho",
+      "scroll": "Role para explorar"
+    },
+    "cta": {
+      "title": "Vamos criar algo atemporal.",
+      "body": "Conte-nos sobre seu espaço e sua visão. Trabalhamos com um número limitado de clientes a cada ano.",
+      "button": "Iniciar a conversa"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "common": {
+    "toggleTheme": "Licht/donker modus wisselen",
+    "bookConsultation": "Een consult boeken",
+    "getInTouch": "Neem contact op",
+    "viewProject": "Project bekijken",
+    "viewAll": "Alles bekijken",
+    "explore": "Ontdekken",
+    "learnMore": "Meer weten",
+    "readMore": "Lees meer",
+    "demoBadge": "Interactieve demo"
+  },
+  "nav": {
+    "about": "Studio",
+    "services": "Diensten",
+    "portfolio": "Portfolio",
+    "journal": "Journaal",
+    "aiStudio": "AI-studio",
+    "shop": "Shop",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Voorwaarden"
+  },
+  "footer": {
+    "blurb": "Een bekroonde interieurontwerpstudio die sinds 2002 tijdloze, op welzijn gerichte luxe interieurs creëert.",
+    "newsletter": "Word deel van onze wereld",
+    "studio": "Studio",
+    "work": "Werk",
+    "visit": "Bezoek ons",
+    "rights": "Alle rechten voorbehouden."
+  },
+  "newsletter": {
+    "placeholder": "Uw e-mailadres",
+    "submit": "Abonneren",
+    "success": "Welkom — controleer uw inbox om te bevestigen."
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Interieurontwerp · Sinds 2002 · Jersey City",
+      "title": "Tijdloze interieurs, met zorg gemaakt.",
+      "subtitle": "Gotch Studio ontwerpt serene, op welzijn gerichte luxe woningen en ruimtes in alle 50 staten en wereldwijd.",
+      "ctaPrimary": "Start uw project",
+      "ctaSecondary": "Bekijk ons werk",
+      "scroll": "Scroll om te ontdekken"
+    },
+    "cta": {
+      "title": "Laten we iets tijdloos creëren.",
+      "body": "Vertel ons over uw ruimte en visie. We werken elk jaar met een beperkt aantal klanten.",
+      "button": "Begin het gesprek"
+    }
+  }
+}
