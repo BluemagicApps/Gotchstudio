@@ -120,12 +120,54 @@ pm2 reload gotchstudio
 
 ---
 
-## Optional: database-backed forms
+## Backend & database (inquiries, bookings, subscribers, audit, exports)
 
-Contact / newsletter / booking forms are UI placeholders by default. To persist
-submissions, use the Prisma schema in `prisma/` and the optional Express service
-in `server/` (see `server/README.md`), or add Next API routes that call Prisma.
-Set `DATABASE_URL` accordingly.
+The contact, booking, and newsletter forms persist to a database via built-in
+Next API routes (`app/api/inquiry`, `/subscribe`, `/consultation`) backed by
+Prisma. There's an append-only **audit log**, marketing-attribution capture
+(source/UTM/locale, IP stored only as a salted hash), and bearer-protected
+**export** endpoints for auditing + marketing.
+
+### One-time setup
+
+```bash
+# In .env: set DATABASE_URL, ADMIN_API_KEY (long random), AUDIT_SALT (random)
+npm run db:migrate     # applies prisma/migrations to the database
+```
+
+`postinstall` runs `prisma generate` automatically on `npm ci`. Default DB is
+**SQLite** (one file, resolved relative to `prisma/`; back it up by copying the
+file). For **Postgres** (Supabase/Neon) or **MySQL**, change `provider` in
+`prisma/schema.prisma`, set `DATABASE_URL` to that connection string, and re-run
+`npm run db:migrate`.
+
+> **Standalone + Prisma:** copy the generated client into the standalone bundle
+> after build, alongside the static/public copy step:
+> ```bash
+> cp -r node_modules/.prisma .next/standalone/node_modules/.prisma
+> cp -r node_modules/@prisma/client .next/standalone/node_modules/@prisma/client
+> ```
+
+### Admin: auditing + marketing exports
+
+Protected by `Authorization: Bearer $ADMIN_API_KEY`.
+
+```bash
+# Operational summary (counts by status, last-7-days, audit total)
+curl -H "Authorization: Bearer $ADMIN_API_KEY" https://your-domain/api/admin/stats
+
+# Marketing list as CSV (open in Excel / import to your ESP/CRM)
+curl -H "Authorization: Bearer $ADMIN_API_KEY" \
+  "https://your-domain/api/admin/export?type=subscribers&format=csv&status=subscribed" -o subscribers.csv
+
+# Inquiries / bookings / audit trail, with date + status filters
+curl -H "Authorization: Bearer $ADMIN_API_KEY" \
+  "https://your-domain/api/admin/export?type=inquiries&from=2026-01-01&to=2026-12-31" -o inquiries.csv
+```
+
+`type` = `inquiries | subscribers | consultations | audit`; `format` =
+`csv | json`. The legacy Express service in `server/` is superseded by these
+routes and can be ignored.
 
 ---
 

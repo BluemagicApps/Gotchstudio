@@ -23,6 +23,12 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Database (SQLite data files — schema lives in prisma/migrations, which IS committed)
+*.db
+*.db-journal
+prisma/*.db
+prisma/*.db-journal
+
 # Misc
 *.tsbuildinfo
 .cache/
