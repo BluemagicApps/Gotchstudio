@@ -1,0 +1,52 @@
+{
+  "common": {
+    "toggleTheme": "ライト/ダークモードを切り替え",
+    "bookConsultation": "ご相談を予約",
+    "getInTouch": "お問い合わせ",
+    "viewProject": "プロジェクトを見る",
+    "viewAll": "すべて見る",
+    "explore": "見る",
+    "learnMore": "詳しく見る",
+    "readMore": "続きを読む",
+    "demoBadge": "インタラクティブデモ"
+  },
+  "nav": {
+    "about": "スタジオ",
+    "services": "サービス",
+    "portfolio": "ポートフォリオ",
+    "journal": "ジャーナル",
+    "aiStudio": "AIスタジオ",
+    "shop": "ショップ",
+    "contact": "お問い合わせ",
+    "privacy": "プライバシー",
+    "terms": "利用規約"
+  },
+  "footer": {
+    "blurb": "2002年以来、時代を超えた、ウェルネスを重視したラグジュアリーな空間を手がける受賞歴のあるインテリアデザインスタジオです。",
+    "newsletter": "私たちの世界へ",
+    "studio": "スタジオ",
+    "work": "実績",
+    "visit": "ご来訪",
+    "rights": "無断複写・転載を禁じます。"
+  },
+  "newsletter": {
+    "placeholder": "メールアドレス",
+    "submit": "購読する",
+    "success": "ようこそ — 受信トレイをご確認ください。"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "インテリアデザイン · 2002年創立 · ジャージーシティ",
+      "title": "時を超える空間を、丁寧に。",
+      "subtitle": "Gotch Studioは、全米50州および世界各地で、静謐でウェルネスを重視したラグジュアリーな住空間を手がけます。",
+      "ctaPrimary": "プロジェクトを始める",
+      "ctaSecondary": "実績を見る",
+      "scroll": "スクロールして見る"
+    },
+    "cta": {
+      "title": "時を超えるものを、ともに。",
+      "body": "あなたの空間とビジョンをお聞かせください。私たちは毎年限られた数のお客様とのみお仕事をしています。",
+      "button": "ご相談を始める"
+    }
+  }
+}

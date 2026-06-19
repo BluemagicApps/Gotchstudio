@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gotch Studio — Timeless Interior Design</title>
+    <meta
+      name="description"
+      content="Award-winning interior design firm founded in 2002 in Jersey City, NJ. Timeless, wellness-led luxury interiors across the US and worldwide."
+    />
+    <!-- Fallback redirect for browsers without JS. -->
+    <noscript>
+      <meta http-equiv="refresh" content="0; url=/en/" />
+    </noscript>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #f4efe6;
+        color: #2b2722;
+        font-family: Georgia, "Times New Roman", serif;
+      }
+      .wrap {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1rem;
+        letter-spacing: 0.12em;
+      }
+      .brand {
+        font-size: 1.5rem;
+      }
+      .dot {
+        color: #b08d57;
+      }
+    </style>
+    <script>
+      /*
+       * Root entry: detect the visitor's preferred locale and forward to the
+       * matching localized build. Mirrors lib/geo.ts so the very first hit on
+       * the bare domain lands in the right language. Defaults to English.
+       */
+      (function () {
+        var SUPPORTED = ["en", "de", "es", "pt", "fr", "zh", "ja", "nl"];
+        var MAP = {
+          DE: "de", AT: "de", CH: "de",
+          ES: "es", MX: "es", AR: "es", CO: "es", CL: "es", PE: "es",
+          BR: "pt", PT: "pt",
+          FR: "fr", BE: "fr",
+          CN: "zh", TW: "zh", HK: "zh",
+          JP: "ja",
+          NL: "nl"
+        };
+
+        function go(locale) {
+          if (SUPPORTED.indexOf(locale) === -1) locale = "en";
+          window.location.replace("/" + locale + "/");
+        }
+
+        // 1) Stored preference wins.
+        try {
+          var stored = localStorage.getItem("gotch-locale");
+          if (stored && SUPPORTED.indexOf(stored) !== -1) return go(stored);
+        } catch (e) {}
+
+        // 2) IP geolocation (best effort, 2s budget), then navigator, then default.
+        var done = false;
+        var timer = setTimeout(function () {
+          if (done) return;
+          done = true;
+          var nav = (navigator.language || "en").slice(0, 2).toLowerCase();
+          go(nav);
+        }, 2000);
+
+        fetch("https://ipapi.co/json/")
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            if (done) return;
+            done = true;
+            clearTimeout(timer);
+            go(MAP[d && d.country_code] || (navigator.language || "en").slice(0, 2).toLowerCase());
+          })
+          .catch(function () {
+            if (done) return;
+            done = true;
+            clearTimeout(timer);
+            go((navigator.language || "en").slice(0, 2).toLowerCase());
+          });
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="brand">GOTCH<span class="dot">.</span>STUDIO</div>
+      <div>Loading…</div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Default tokens = Variant 1 "Timeless Editorial". These are baked in so the
+ * first static paint is correct before any JS runs. VariantProvider overrides
+ * these custom properties on <html> when another variant is selected.
+ * Values are HSL channel triples consumed via hsl(var(--token) / alpha).
+ */
+@layer base {
+  :root {
+    --ivory: 40 33% 96%;
+    --charcoal: 30 8% 12%;
+    --taupe: 32 14% 64%;
+    --wood: 26 30% 38%;
+    --brass: 38 38% 55%;
+    --emerald: 162 32% 28%;
+    --navy: 215 38% 22%;
+
+    --background: 40 33% 96%;
+    --foreground: 30 8% 14%;
+    --muted: 36 20% 90%;
+    --muted-foreground: 30 6% 40%;
+    --card: 40 33% 98%;
+    --card-foreground: 30 8% 14%;
+    --border: 34 16% 84%;
+    --input: 34 16% 84%;
+    --ring: 38 38% 55%;
+    --accent: 38 38% 55%;
+    --accent-foreground: 30 8% 12%;
+    --primary: 30 8% 14%;
+    --primary-foreground: 40 33% 96%;
+
+    --radius: 0.25rem;
+
+    --font-display: "Cormorant Garamond", Georgia, serif;
+    --font-body: "Inter", system-ui, sans-serif;
+  }
+
+  .dark {
+    --background: 30 9% 9%;
+    --foreground: 40 24% 90%;
+    --muted: 30 7% 16%;
+    --muted-foreground: 34 12% 64%;
+    --card: 30 9% 12%;
+    --card-foreground: 40 24% 90%;
+    --border: 30 7% 20%;
+    --input: 30 7% 20%;
+    --ring: 38 42% 58%;
+    --accent: 38 42% 58%;
+    --accent-foreground: 30 9% 9%;
+    --primary: 40 24% 90%;
+    --primary-foreground: 30 9% 9%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "ss01", "cv01";
+  }
+
+  h1, h2, h3, h4, h5 {
+    @apply font-serif;
+    font-feature-settings: "liga", "dlig";
+  }
+
+  ::selection {
+    @apply bg-accent/30 text-foreground;
+  }
+
+  /* Refined focus ring for accessibility. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Respect reduced-motion preferences. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Editorial section eyebrow label. */
+  .eyebrow {
+    @apply text-xs uppercase tracking-luxe text-muted-foreground font-sans;
+  }
+
+  /* Fluid display heading. */
+  .display {
+    @apply font-serif font-light leading-[1.05];
+    font-size: clamp(2.25rem, 5vw + 1rem, 5.5rem);
+  }
+
+  .display-sm {
+    @apply font-serif font-light leading-[1.1];
+    font-size: clamp(1.875rem, 3vw + 1rem, 3.25rem);
+  }
+
+  /* Thin luxury divider. */
+  .rule {
+    @apply h-px w-full bg-border;
+  }
+
+  /* Subtle image hover zoom utility. */
+  .img-zoom {
+    @apply transition-transform duration-700 will-change-transform;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .group:hover .img-zoom {
+    @apply scale-[1.04];
+  }
+
+  .link-underline {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full;
+  }
+}
+
+/* Shimmer placeholder for lazy images. */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--border)) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+  @apply animate-shimmer;
+}

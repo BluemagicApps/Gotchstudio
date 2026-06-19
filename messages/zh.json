@@ -1,0 +1,52 @@
+{
+  "common": {
+    "toggleTheme": "切换浅色/深色模式",
+    "bookConsultation": "预约咨询",
+    "getInTouch": "联系我们",
+    "viewProject": "查看项目",
+    "viewAll": "查看全部",
+    "explore": "探索",
+    "learnMore": "了解更多",
+    "readMore": "阅读更多",
+    "demoBadge": "互动演示"
+  },
+  "nav": {
+    "about": "工作室",
+    "services": "服务",
+    "portfolio": "作品集",
+    "journal": "日志",
+    "aiStudio": "AI 工作室",
+    "shop": "商店",
+    "contact": "联系",
+    "privacy": "隐私",
+    "terms": "条款"
+  },
+  "footer": {
+    "blurb": "一家屡获殊荣的室内设计工作室，自 2002 年以来打造永恒、注重健康的奢华室内空间。",
+    "newsletter": "加入我们的世界",
+    "studio": "工作室",
+    "work": "作品",
+    "visit": "造访",
+    "rights": "版权所有。"
+  },
+  "newsletter": {
+    "placeholder": "您的电子邮箱",
+    "submit": "订阅",
+    "success": "欢迎 — 请查收邮箱以确认。"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "室内设计 · 创立于 2002 · 泽西市",
+      "title": "永恒的室内空间，匠心打造。",
+      "subtitle": "Gotch Studio 在全美 50 个州及世界各地设计宁静、注重健康的奢华住宅与空间。",
+      "ctaPrimary": "开启您的项目",
+      "ctaSecondary": "查看我们的作品",
+      "scroll": "向下滚动探索"
+    },
+    "cta": {
+      "title": "让我们创造永恒之作。",
+      "body": "请告诉我们您的空间与愿景。我们每年仅与有限数量的客户合作。",
+      "button": "开始对话"
+    }
+  }
+}

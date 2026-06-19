@@ -1,0 +1,52 @@
+{
+  "common": {
+    "toggleTheme": "Hell-/Dunkelmodus umschalten",
+    "bookConsultation": "Beratung buchen",
+    "getInTouch": "Kontakt aufnehmen",
+    "viewProject": "Projekt ansehen",
+    "viewAll": "Alle ansehen",
+    "explore": "Entdecken",
+    "learnMore": "Mehr erfahren",
+    "readMore": "Weiterlesen",
+    "demoBadge": "Interaktive Demo"
+  },
+  "nav": {
+    "about": "Studio",
+    "services": "Leistungen",
+    "portfolio": "Portfolio",
+    "journal": "Journal",
+    "aiStudio": "KI-Studio",
+    "shop": "Shop",
+    "contact": "Kontakt",
+    "privacy": "Datenschutz",
+    "terms": "AGB"
+  },
+  "footer": {
+    "blurb": "Ein preisgekröntes Innenarchitekturstudio, das seit 2002 zeitlose, wohlbefindensorientierte Luxusinterieurs gestaltet.",
+    "newsletter": "Werden Sie Teil unserer Welt",
+    "studio": "Studio",
+    "work": "Arbeiten",
+    "visit": "Besuch",
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "newsletter": {
+    "placeholder": "Ihre E-Mail-Adresse",
+    "submit": "Abonnieren",
+    "success": "Willkommen — bitte bestätigen Sie in Ihrem Postfach."
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Innenarchitektur · Seit 2002 · Jersey City",
+      "title": "Zeitlose Interieurs, mit Bedacht gestaltet.",
+      "subtitle": "Gotch Studio gestaltet ruhige, wohlbefindensorientierte Luxusräume in allen 50 Bundesstaaten und weltweit.",
+      "ctaPrimary": "Projekt beginnen",
+      "ctaSecondary": "Arbeiten ansehen",
+      "scroll": "Scrollen zum Entdecken"
+    },
+    "cta": {
+      "title": "Lassen Sie uns etwas Zeitloses schaffen.",
+      "body": "Erzählen Sie uns von Ihrem Raum und Ihrer Vision. Wir arbeiten jährlich mit einer begrenzten Anzahl von Kunden.",
+      "button": "Gespräch beginnen"
+    }
+  }
+}
