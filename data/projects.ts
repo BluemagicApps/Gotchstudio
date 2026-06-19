@@ -49,7 +49,7 @@ export interface Project {
 const U = (id: string, w = 1600) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
 
-export const projects: Project[] = [
+const curatedProjects: Project[] = [
   {
     slug: "hudson-loft",
     title: "Hudson Loft",
@@ -333,6 +333,183 @@ export const projects: Project[] = [
     featured: false,
   },
 ];
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Extended portfolio. The curated projects above are hand-authored; these are
+ * generated from curated interior imagery + tailored copy templates to give the
+ * portfolio real depth. Deterministic, so static generation is stable. Replace
+ * with real case studies + commissioned photography before launch.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+const PHOTO_POOL = [
+  "photo-1505693416388-ac5ce068fe85",
+  "photo-1586023492125-27b2c045efd7",
+  "photo-1556909212-d5b604d0c90d",
+  "photo-1493809842364-78817add7ffb",
+  "photo-1600210492486-724fe5c67fb0",
+  "photo-1600121848594-d8644e57abab",
+  "photo-1618219908412-a29a1bb7b86e",
+  "photo-1600585154340-be6161a56a0c",
+  "photo-1600566753086-00f18fb6b3ea",
+  "photo-1600607687939-ce8a6c25118c",
+  "photo-1524758631624-e2822e304c36",
+  "photo-1497215728101-856f4ea42174",
+  "photo-1502672260266-1c1ef2d93688",
+  "photo-1560448204-e02f11c3d0e2",
+  "photo-1600585152220-90363fe7e115",
+  "photo-1601000938259-9e92002320b2",
+  "photo-1567538096630-e0c55bd6374c",
+  "photo-1532372320572-cda25653a26d",
+  "photo-1493663284031-b7e3aefcae8e",
+  "photo-1567016432779-094069958ea5",
+  "photo-1505691938895-1758d7feb511",
+  "photo-1556228453-efd6c1ff04f6",
+  "photo-1600047509807-ba8f99d2cdde",
+  "photo-1600566752355-35792bedcfea",
+  "photo-1600210491892-03d54c0aaf87",
+  "photo-1583847268964-b28dc8f51f92",
+];
+
+const GEN_STYLES: ProjectStyle[] = [
+  "Modern",
+  "Classic",
+  "Eclectic",
+  "Minimal",
+  "Coastal",
+  "Wellness",
+];
+const GEN_TYPES: ProjectType[] = [
+  "Residential",
+  "Commercial",
+  "New Build",
+  "Renovation",
+  "Kitchen & Bath",
+];
+
+const STYLE_FEEL: Record<ProjectStyle, string> = {
+  Modern: "clean lines and warm minimalism",
+  Classic: "timeless elegance and considered detail",
+  Eclectic: "collected, well-travelled character",
+  Minimal: "quiet restraint and abundant light",
+  Coastal: "breezy, natural materials and soft color",
+  Wellness: "calm, tactile, restorative spaces",
+};
+
+const TYPE_WORK: Record<ProjectType, string> = {
+  Residential: "a full-service home",
+  Commercial: "a branded commercial environment",
+  "New Build": "ground-up interior architecture",
+  Renovation: "a sensitive, complete renovation",
+  "Kitchen & Bath": "bespoke kitchen and bath interiors",
+};
+
+const SCOPE_BY_TYPE: Record<ProjectType, string[]> = {
+  Residential: [
+    "Full-service interior architecture",
+    "Custom furnishings",
+    "Lighting design",
+    "Styling",
+  ],
+  Commercial: [
+    "Concept & brand environment",
+    "Space planning",
+    "FF&E",
+    "Project management",
+  ],
+  "New Build": [
+    "Architectural collaboration",
+    "Interior architecture",
+    "Finish schedules",
+    "Furnishings",
+  ],
+  Renovation: [
+    "Heritage-sensitive renovation",
+    "Space planning",
+    "Custom millwork",
+    "Furnishings",
+  ],
+  "Kitchen & Bath": [
+    "Custom cabinetry",
+    "Stone & material selection",
+    "Lighting & plumbing",
+    "Installation",
+  ],
+};
+
+const NAME_A = [
+  "Cedar", "Marble", "Linen", "Ember", "Slate", "Ivory", "Hazel", "Onyx",
+  "Saffron", "Willow", "Cove", "Aurora", "Meridian", "Solace", "Atlas",
+  "Verdant", "Lumen", "Quartz", "Hearth", "Dune", "Bramble", "Noble", "Serra",
+  "Calder", "Ashford", "Bellwood", "Coral", "Drift", "Elmwood", "Fern", "Grove",
+  "Harlow", "Indigo", "Juniper", "Kestrel", "Larkspur", "Marlowe", "Nocturne",
+  "Oriel", "Persimmon", "Quill", "Rowan", "Sable", "Thistle", "Umber",
+  "Veranda", "Wren", "Yarrow",
+];
+const NAME_B = [
+  "House", "Residence", "Penthouse", "Retreat", "Loft", "Villa", "Pavilion",
+  "Quarters", "Townhouse", "Manor", "Apartment", "Studio",
+];
+
+const PLACES: { location: string; country: string }[] = [
+  { location: "Aspen, CO", country: "United States" },
+  { location: "Montauk, NY", country: "United States" },
+  { location: "Beverly Hills, CA", country: "United States" },
+  { location: "Greenwich, CT", country: "United States" },
+  { location: "Miami, FL", country: "United States" },
+  { location: "Austin, TX", country: "United States" },
+  { location: "Chicago, IL", country: "United States" },
+  { location: "Seattle, WA", country: "United States" },
+  { location: "London, UK", country: "United Kingdom" },
+  { location: "Paris, France", country: "France" },
+  { location: "Milan, Italy", country: "Italy" },
+  { location: "Lisbon, Portugal", country: "Portugal" },
+  { location: "Barcelona, Spain", country: "Spain" },
+  { location: "Copenhagen, Denmark", country: "Denmark" },
+  { location: "Amsterdam, Netherlands", country: "Netherlands" },
+  { location: "Zurich, Switzerland", country: "Switzerland" },
+  { location: "Dubai, UAE", country: "United Arab Emirates" },
+  { location: "Singapore", country: "Singapore" },
+  { location: "Tokyo, Japan", country: "Japan" },
+  { location: "Sydney, Australia", country: "Australia" },
+  { location: "Toronto, Canada", country: "Canada" },
+  { location: "Marrakesh, Morocco", country: "Morocco" },
+  { location: "Cape Town, South Africa", country: "South Africa" },
+  { location: "Côte d'Azur, France", country: "France" },
+];
+
+const generatedProjects: Project[] = Array.from({ length: 48 }, (_, i) => {
+  const style = GEN_STYLES[i % GEN_STYLES.length];
+  const type = GEN_TYPES[(i * 2 + 1) % GEN_TYPES.length];
+  const place = PLACES[i % PLACES.length];
+  const title = `${NAME_A[i % NAME_A.length]} ${NAME_B[i % NAME_B.length]}`;
+  const slug = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${i + 1}`;
+  const year = 2018 + (i % 8);
+  const g = (n: number) => PHOTO_POOL[(i * 3 + n) % PHOTO_POOL.length];
+  return {
+    slug,
+    title,
+    location: place.location,
+    country: place.country,
+    year,
+    style,
+    type,
+    summary: `A ${style.toLowerCase()} ${type.toLowerCase()} in ${place.location} — ${STYLE_FEEL[style]}, realized with enduring materials.`,
+    story: [
+      `${title} brought us to ${place.location} to create ${TYPE_WORK[type]} defined by ${STYLE_FEEL[style]}. We shaped each room around how our clients actually live, layering natural materials, a considered lighting plan, and furnishings sourced or commissioned to last.`,
+      `The result reads as collected rather than decorated — a space that holds ${STYLE_FEEL[style]} and will age gracefully, growing more beloved with time.`,
+    ],
+    scope: SCOPE_BY_TYPE[type],
+    hero: { url: U(g(0)), alt: `${title} — ${style} interior in ${place.location}` },
+    gallery: [
+      { url: U(g(1)), alt: `${title} interior detail` },
+      { url: U(g(2)), alt: `${title} living space` },
+      { url: U(g(3)), alt: `${title} material palette` },
+    ],
+    featured: false,
+  };
+});
+
+export const projects: Project[] = [...curatedProjects, ...generatedProjects];
 
 export const projectStyles: ProjectStyle[] = [
   "Modern",

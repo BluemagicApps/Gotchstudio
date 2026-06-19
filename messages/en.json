@@ -196,6 +196,8 @@
       "empty": "No projects match your filters yet.",
       "clear": "Clear filters"
     },
+    "loadMore": "Load more projects",
+    "showing": "Showing {shown} of {total} projects",
     "project": {
       "overview": "Overview",
       "scope": "Scope of work",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Search, X } from "lucide-react";
 import { ProjectCard } from "./ProjectCard";
@@ -15,11 +15,15 @@ import {
 import { cn } from "@/lib/utils";
 
 /** Client-side filterable + searchable portfolio grid. */
+const PAGE_SIZE = 12;
+
 export function PortfolioGrid() {
   const t = useTranslations("portfolio.filters");
+  const tp = useTranslations("portfolio");
   const [style, setStyle] = useState<ProjectStyle | "all">("all");
   const [type, setType] = useState<ProjectType | "all">("all");
   const [query, setQuery] = useState("");
+  const [visible, setVisible] = useState(PAGE_SIZE);
 
   const filtered = useMemo(() => {
     return projects.filter((p) => {
@@ -33,6 +37,12 @@ export function PortfolioGrid() {
     });
   }, [style, type, query]);
 
+  // Reset how many are shown whenever the filter set changes.
+  useEffect(() => {
+    setVisible(PAGE_SIZE);
+  }, [style, type, query]);
+
+  const shown = filtered.slice(0, visible);
   const hasFilters = style !== "all" || type !== "all" || query !== "";
 
   return (
@@ -107,13 +117,28 @@ export function PortfolioGrid() {
       {filtered.length === 0 ? (
         <p className="py-24 text-center text-muted-foreground">{t("empty")}</p>
       ) : (
-        <div className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((p, i) => (
-            <Reveal key={p.slug} delay={i % 3}>
-              <ProjectCard project={p} priority={i < 3} />
-            </Reveal>
-          ))}
-        </div>
+        <>
+          <div className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {shown.map((p, i) => (
+              <Reveal key={p.slug} delay={i % 3}>
+                <ProjectCard project={p} priority={i < 3} />
+              </Reveal>
+            ))}
+          </div>
+          {visible < filtered.length && (
+            <div className="mt-14 flex flex-col items-center gap-3">
+              <p className="text-xs text-muted-foreground">
+                {tp("showing", { shown: shown.length, total: filtered.length })}
+              </p>
+              <button
+                onClick={() => setVisible((v) => v + PAGE_SIZE)}
+                className="rounded-full border border-foreground px-6 py-2.5 text-sm tracking-wide transition-colors hover:bg-foreground hover:text-background"
+              >
+                {tp("loadMore")}
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
