@@ -40,6 +40,7 @@ export default async function ServicesPage({
 
 function ServicesContent() {
   const t = useTranslations("services");
+  const tc = useTranslations("common");
 
   return (
     <>
@@ -78,6 +79,12 @@ function ServicesContent() {
                         </li>
                       ))}
                     </ul>
+                    <Link
+                      href={`/services/${service.slug}`}
+                      className="mt-5 inline-flex items-center gap-1 text-sm tracking-wide link-underline"
+                    >
+                      {tc("learnMore")} <ArrowRight className="h-4 w-4" />
+                    </Link>
                   </div>
                 </article>
               </Reveal>

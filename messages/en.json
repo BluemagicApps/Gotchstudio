@@ -160,6 +160,22 @@
       "title": "Not sure which service fits?",
       "body": "Book a consultation and we'll guide you to the right path for your space, timeline, and budget.",
       "button": "Book a Consultation"
+    },
+    "detail": {
+      "back": "All services",
+      "overview": "Overview",
+      "timeline": "Timeline",
+      "investment": "Investment",
+      "whatsIncluded": "What's included",
+      "howItWorks": "How it works",
+      "idealFor": "Who it's for",
+      "faqTitle": "Frequently asked",
+      "bookTitle": "Book this service",
+      "bookIntro": "Reserve a consultation to begin, or send an inquiry and we'll be in touch within two business days.",
+      "orInquire": "Prefer to write to us?",
+      "related": "Explore other services",
+      "bookCta": "Book a consultation",
+      "inquireCta": "Send an inquiry"
     }
   },
   "portfolio": {

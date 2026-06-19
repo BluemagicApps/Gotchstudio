@@ -42,7 +42,10 @@ export function ServicesGrid({ home = false }: { home?: boolean }) {
             Icons.Sparkles;
           return (
             <Reveal key={service.slug} delay={i % 3} as="div">
-              <div className="group h-full bg-background p-8 transition-colors duration-500 hover:bg-card lg:p-10">
+              <Link
+                href={`/services/${service.slug}`}
+                className="group block h-full bg-background p-8 transition-colors duration-500 hover:bg-card lg:p-10"
+              >
                 <Icon
                   className="h-7 w-7 text-accent transition-transform duration-500 group-hover:-translate-y-1"
                   strokeWidth={1.25}
@@ -53,7 +56,7 @@ export function ServicesGrid({ home = false }: { home?: boolean }) {
                 <p className="mt-3 text-sm text-muted-foreground">
                   {service.summary}
                 </p>
-              </div>
+              </Link>
             </Reveal>
           );
         })}
