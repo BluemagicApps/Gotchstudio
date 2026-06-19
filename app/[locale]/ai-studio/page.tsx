@@ -5,12 +5,7 @@ import { type Locale } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/shared/PageHero";
 import { Section } from "@/components/shared/Section";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { RoomVisualizer } from "@/components/ai/RoomVisualizer";
-import { VirtualStaging } from "@/components/ai/VirtualStaging";
-import { VirtualTour } from "@/components/ai/VirtualTour";
-import { StyleQuiz } from "@/components/ai/StyleQuiz";
-import { ConciergePanel } from "@/components/ai/ConciergePanel";
+import { StudioTabs } from "@/components/ai/StudioTabs";
 
 export async function generateMetadata({
   params,
@@ -49,30 +44,7 @@ function AIContent() {
       />
 
       <Section>
-        <Tabs defaultValue="visualizer">
-          <TabsList className="w-full justify-start sm:justify-center">
-            <TabsTrigger value="visualizer">{t("visualizer.title")}</TabsTrigger>
-            <TabsTrigger value="staging">{t("staging.title")}</TabsTrigger>
-            <TabsTrigger value="tour">{t("tour.title")}</TabsTrigger>
-            <TabsTrigger value="quiz">{t("quiz.title")}</TabsTrigger>
-            <TabsTrigger value="concierge">{t("concierge.title")}</TabsTrigger>
-          </TabsList>
-          <TabsContent value="visualizer">
-            <RoomVisualizer />
-          </TabsContent>
-          <TabsContent value="staging">
-            <VirtualStaging />
-          </TabsContent>
-          <TabsContent value="tour">
-            <VirtualTour />
-          </TabsContent>
-          <TabsContent value="quiz">
-            <StyleQuiz />
-          </TabsContent>
-          <TabsContent value="concierge">
-            <ConciergePanel />
-          </TabsContent>
-        </Tabs>
+        <StudioTabs />
       </Section>
     </>
   );
