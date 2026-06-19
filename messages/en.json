@@ -287,11 +287,16 @@
       "suggest2": "How does your process work?",
       "suggest3": "Do you work internationally?"
     },
-    "more": {
-      "title": "On the roadmap",
-      "viewer": "3D Walkthroughs",
-      "viewerDesc": "Immersive 3D and 360° tours of proposed designs.",
-      "soon": "Coming soon"
+    "tour": {
+      "title": "Virtual Walkthrough",
+      "intro": "Step inside in 360°. Drag to look around, scroll to zoom, and move between rooms.",
+      "dragHint": "Drag to look · scroll to zoom",
+      "play": "Play auto-rotate",
+      "pause": "Pause auto-rotate",
+      "fullscreen": "Fullscreen",
+      "error": "This panorama couldn't load. Try another room.",
+      "unsupported": "Your browser doesn't support 3D viewing (WebGL). Try a modern browser to explore the walkthrough.",
+      "note": "Demo panoramas are openly-licensed placeholder interiors; we replace these with immersive 360° captures of your proposed design."
     }
   },
   "shop": {
