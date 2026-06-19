@@ -11,7 +11,7 @@ import {
   Compass,
   Loader2,
 } from "lucide-react";
-import { tourScenes } from "@/data/tours";
+import { tourScenes, tourCategories } from "@/data/tours";
 import { cn } from "@/lib/utils";
 
 /**
@@ -46,6 +46,8 @@ interface Engine {
   camera: THREE.PerspectiveCamera;
   material: THREE.MeshBasicMaterial;
   loader: THREE.TextureLoader;
+  /** Active <video> element when the current scene is a 360° video. */
+  video: HTMLVideoElement | null;
   raf: number;
   // view state
   lon: number;
@@ -119,6 +121,7 @@ export function VirtualTour() {
         camera,
         material,
         loader: new THREE_NS.TextureLoader(),
+        video: null,
         raf: 0,
         lon: 0,
         lat: 0,
@@ -207,6 +210,12 @@ export function VirtualTour() {
         el.removeEventListener("pointercancel", onUp);
         el.removeEventListener("pointerleave", onUp);
         el.removeEventListener("wheel", onWheel);
+        if (engine.video) {
+          engine.video.pause();
+          engine.video.removeAttribute("src");
+          engine.video.load();
+          engine.video = null;
+        }
         material.map?.dispose();
         material.dispose();
         geometry.dispose();
@@ -238,28 +247,78 @@ export function VirtualTour() {
         if (tries++ < 50) setTimeout(tryLoad, 60);
         return;
       }
-      engine.loader.load(
-        tourScenes[active].src,
-        (texture) => {
-          if (cancelled) {
-            texture.dispose();
-            return;
-          }
-          texture.colorSpace = engine.THREE.SRGBColorSpace;
-          const old = engine.material.map;
-          engine.material.map = texture;
-          engine.material.needsUpdate = true;
-          old?.dispose();
+
+      const scene = tourScenes[active];
+
+      // Stop any video from a previous scene before swapping.
+      const stopVideo = () => {
+        if (engine.video) {
+          engine.video.pause();
+          engine.video.removeAttribute("src");
+          engine.video.load();
+          engine.video = null;
+        }
+      };
+
+      const swapMap = (texture: THREE.Texture) => {
+        texture.colorSpace = engine.THREE.SRGBColorSpace;
+        const old = engine.material.map;
+        engine.material.map = texture;
+        engine.material.needsUpdate = true;
+        if (old) old.dispose();
+      };
+
+      if (scene.video) {
+        // 360° video scene: equirectangular video on the sphere.
+        stopVideo();
+        const video = document.createElement("video");
+        video.src = scene.video;
+        video.crossOrigin = "anonymous";
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.setAttribute("playsinline", "");
+        const onReady = () => {
+          if (cancelled) return;
+          swapMap(new engine.THREE.VideoTexture(video));
+          engine.video = video;
+          video.play().catch(() => {});
           setLoading(false);
-        },
-        undefined,
-        () => {
-          if (!cancelled) {
-            setError(true);
+        };
+        video.addEventListener("loadeddata", onReady, { once: true });
+        video.addEventListener(
+          "error",
+          () => {
+            if (!cancelled) {
+              setError(true);
+              setLoading(false);
+            }
+          },
+          { once: true },
+        );
+        video.load();
+      } else {
+        // Still equirectangular image scene.
+        engine.loader.load(
+          scene.src,
+          (texture) => {
+            if (cancelled) {
+              texture.dispose();
+              return;
+            }
+            stopVideo();
+            swapMap(texture);
             setLoading(false);
-          }
-        },
-      );
+          },
+          undefined,
+          () => {
+            if (!cancelled) {
+              setError(true);
+              setLoading(false);
+            }
+          },
+        );
+      }
     };
     tryLoad();
 
@@ -341,22 +400,35 @@ export function VirtualTour() {
             </span>
           </div>
 
-          {/* Scene switcher */}
-          <div className="mt-5 flex flex-wrap gap-2">
-            {tourScenes.map((s, i) => (
-              <button
-                key={s.id}
-                onClick={() => setActive(i)}
-                className={cn(
-                  "rounded-full border px-4 py-1.5 text-sm transition-colors",
-                  i === active
-                    ? "border-foreground bg-foreground text-background"
-                    : "border-border text-muted-foreground hover:border-foreground hover:text-foreground",
-                )}
-              >
-                {s.name}
-              </button>
-            ))}
+          {/* Scene switcher, grouped by space type */}
+          <div className="mt-6 space-y-4">
+            {tourCategories.map((cat) => {
+              const scenes = tourScenes
+                .map((s, i) => ({ s, i }))
+                .filter(({ s }) => s.category === cat);
+              if (scenes.length === 0) return null;
+              return (
+                <div key={cat}>
+                  <p className="eyebrow mb-2">{cat}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {scenes.map(({ s, i }) => (
+                      <button
+                        key={s.id}
+                        onClick={() => setActive(i)}
+                        className={cn(
+                          "rounded-full border px-4 py-1.5 text-sm transition-colors",
+                          i === active
+                            ? "border-foreground bg-foreground text-background"
+                            : "border-border text-muted-foreground hover:border-foreground hover:text-foreground",
+                        )}
+                      >
+                        {s.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           <p className="mt-5 text-xs text-muted-foreground">{t("note")}</p>
