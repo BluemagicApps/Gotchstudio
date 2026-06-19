@@ -5,57 +5,35 @@ import { MessageCircle, X, Send, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-}
+import { useConcierge } from "./useConcierge";
 
 /**
- * Floating design concierge. Responses are scripted (keyword-matched) for the
- * demo. To make it live, replace `mockReply` with a fetch to a serverless
- * endpoint that calls the Claude API — see server/README.md.
+ * Floating Design Concierge. Streams live answers from /api/chat (Claude),
+ * grounded in the studio's own services, process, and work. When no Claude key
+ * is configured the same endpoint returns a scripted reply, so this UI is
+ * unchanged either way.
  */
-function mockReply(input: string): string {
-  const q = input.toLowerCase();
-  if (q.includes("price") || q.includes("cost") || q.includes("budget"))
-    return "Every project is bespoke, so investment varies with scope. Most full-service residential projects begin in the six figures; e-Design and virtual consultations start far lower. Share a few details on the contact page and we'll give you a tailored range.";
-  if (q.includes("process") || q.includes("how"))
-    return "Our process spans six phases: Discovery, Concept, Design Development, Procurement, Installation, and Reveal & Aftercare. You can see each step on the Services page.";
-  if (q.includes("international") || q.includes("global") || q.includes("where"))
-    return "We're based in Jersey City and work across all 50 US states, as well as Europe, the Middle East, and Asia. Remote e-Design is available anywhere.";
-  if (q.includes("service"))
-    return "We offer residential and commercial design, new build & renovation, kitchen & bath, furnishings procurement, e-Design, virtual consultations, and AI-enhanced design.";
-  if (q.includes("ai") || q.includes("visualiz"))
-    return "Our AI Studio lets you reimagine your room in our signature styles, take a style quiz, and build a moodboard. Find it in the navigation under 'AI Studio'.";
-  return "Thank you for reaching out! I can help with our services, process, locations, or the AI Studio. For anything specific, the contact page connects you directly with our team.";
-}
-
 export function Chatbot() {
   const t = useTranslations("chatbot");
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (open && messages.length === 0) {
-      setMessages([{ role: "assistant", content: t("welcome") }]);
-    }
-  }, [open, messages.length, t]);
+  const { messages, streaming, send } = useConcierge(t("welcome"), t("error"));
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [messages]);
 
-  function send(text: string) {
-    if (!text.trim()) return;
-    setMessages((m) => [...m, { role: "user", content: text }]);
+  function submit(text: string) {
+    if (!text.trim() || streaming) return;
     setInput("");
-    setTimeout(() => {
-      setMessages((m) => [...m, { role: "assistant", content: mockReply(text) }]);
-    }, 500);
+    void send(text);
   }
+
+  // A streaming reply that hasn't produced text yet → show typing dots.
+  const last = messages[messages.length - 1];
+  const awaitingFirstToken =
+    streaming && last?.role === "assistant" && last.content === "";
 
   return (
     <>
@@ -87,13 +65,16 @@ export function Chatbot() {
                 <div
                   key={i}
                   className={cn(
-                    "max-w-[85%] rounded-lg px-3 py-2 text-sm",
+                    "max-w-[85%] whitespace-pre-wrap rounded-lg px-3 py-2 text-sm",
                     m.role === "user"
                       ? "ml-auto bg-primary text-primary-foreground"
                       : "bg-muted text-foreground",
                   )}
                 >
-                  {m.content}
+                  {m.content ||
+                    (awaitingFirstToken && i === messages.length - 1 ? (
+                      <TypingDots />
+                    ) : null)}
                 </div>
               ))}
               {messages.length <= 1 && (
@@ -101,7 +82,7 @@ export function Chatbot() {
                   {[t("suggest1"), t("suggest2"), t("suggest3")].map((s) => (
                     <button
                       key={s}
-                      onClick={() => send(s)}
+                      onClick={() => submit(s)}
                       className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted"
                     >
                       {s}
@@ -114,7 +95,7 @@ export function Chatbot() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                send(input);
+                submit(input);
               }}
               className="border-t border-border p-3"
             >
@@ -127,8 +108,9 @@ export function Chatbot() {
                 />
                 <button
                   type="submit"
+                  disabled={streaming || !input.trim()}
                   aria-label={t("send")}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-primary text-primary-foreground"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-primary text-primary-foreground disabled:opacity-50"
                 >
                   <Send className="h-4 w-4" />
                 </button>
@@ -141,5 +123,19 @@ export function Chatbot() {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+function TypingDots() {
+  return (
+    <span className="inline-flex items-center gap-1 py-1">
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/60"
+          style={{ animationDelay: `${i * 0.15}s` }}
+        />
+      ))}
+    </span>
   );
 }

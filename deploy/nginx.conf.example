@@ -1,0 +1,45 @@
+# Nginx reverse proxy for the Gotch Studio Next.js server (PM2 on 127.0.0.1:3000).
+# Save as /etc/nginx/sites-available/gotchstudio, symlink into sites-enabled,
+# then run `sudo nginx -t && sudo systemctl reload nginx`.
+#
+# TLS: provision certificates with `sudo certbot --nginx -d gotchstudio.com -d www.gotchstudio.com`.
+# Certbot will edit this server block to add the 443 listener and redirect.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name gotchstudio.com www.gotchstudio.com;
+
+    # Allow generous bodies for the AI image tools (downscaled data-URL uploads).
+    client_max_body_size 12M;
+
+    # Long-lived connections for streamed concierge responses.
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    # Stream Claude tokens through immediately (no buffering on /api/chat).
+    location /api/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_buffering off;
+        proxy_cache off;
+        # AI image generation can take up to ~2 minutes.
+        proxy_read_timeout 180s;
+        proxy_send_timeout 180s;
+    }
+
+    # Cache Next's immutable build assets aggressively.
+    location /_next/static/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_cache_valid 200 60m;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+    }
+}

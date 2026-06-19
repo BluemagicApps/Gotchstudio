@@ -1,86 +1,140 @@
-# Deployment Guide — Gotch Studio
+# Deploying Gotch Studio to a VPS
 
-The site is built with **Next.js 15** in **static export** mode (`output: 'export'`),
-so a production build produces a plain `out/` folder of HTML/CSS/JS that runs on
-any static host — including **cPanel / shared hosting** — with no Node runtime.
+The site is a **Next.js (App Router) server application** — it renders pages and
+runs the AI Studio's API routes (Design Concierge, Room Visualizer, Virtual
+Staging, Style Profile). It is built with `output: "standalone"`, which emits a
+small self-contained Node server you run behind Nginx with PM2.
 
-## 1. Build the static site
+> The AI tools degrade gracefully: with no API keys set, the concierge uses
+> scripted replies, the image tools show curated reference imagery, and the
+> style profile uses a static fallback. Add keys to switch everything to live.
+
+---
+
+## 0. Prerequisites on the VPS
+
+- Ubuntu/Debian (or similar) with sudo.
+- **Node.js 20 LTS+** and npm.
+- **Nginx** (reverse proxy + TLS).
+- **PM2** process manager: `npm i -g pm2`.
+- A domain pointed at the server (A/AAAA records).
 
 ```bash
-npm install
-npm run build          # generates ./out
+# Node 20 via nodesource (example)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs nginx
+sudo npm i -g pm2
 ```
 
-`out/` contains:
+---
 
-- `index.html` — root entry that geo-detects language and redirects to `/<locale>/`.
-- `en/`, `de/`, `es/`, `pt/`, `fr/`, `zh/`, `ja/`, `nl/` — fully pre-rendered locales.
-- `404.html`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `site.webmanifest`, `.htaccess`.
-- `_next/` — hashed, long-cacheable assets.
-
-Preview locally before uploading:
+## 1. Get the code and configure environment
 
 ```bash
-npm run serve          # npx serve out → http://localhost:3000
+git clone <your-repo-url> /var/www/gotchstudio
+cd /var/www/gotchstudio
+cp .env.example .env
+# Edit .env — set NEXT_PUBLIC_SITE_URL, and (optionally) ANTHROPIC_API_KEY and
+# REPLICATE_API_TOKEN to enable live AI generation.
+nano .env
 ```
 
-## 2. Upload to cPanel (static — recommended)
+Keys (all optional; the site runs without them):
 
-1. In cPanel → **File Manager**, open `public_html` (or a subdomain's docroot).
-2. Upload the **contents of `out/`** (not the folder itself) into `public_html`.
-   - Easiest: zip `out/`, upload the zip, then **Extract** in File Manager.
-   - Ensure the included `.htaccess` lands at `public_html/.htaccess`
-     (enable "show hidden files" in File Manager settings).
-3. Visit your domain. The root redirects to the visitor's language automatically.
+| Variable | Enables |
+|---|---|
+| `ANTHROPIC_API_KEY` | Live Design Concierge + AI Style Profile (Claude) |
+| `REPLICATE_API_TOKEN` | Live Room Visualizer + Virtual Staging (image generation) |
+| `NEXT_PUBLIC_SITE_URL` | Correct canonical/OG/sitemap URLs |
 
-That's it — no Node, no database required.
+---
 
-## 3. Optional: dynamic backend (forms, newsletter, bookings)
+## 2. Build
 
-The static site uses mocked submit handlers. To persist submissions:
-
-1. Follow `server/README.md` to run the small Express API (locally or via
-   cPanel's **Setup Node.js App**).
-2. Set `NEXT_PUBLIC_API_URL` and replace the mocked handlers as documented.
-3. Rebuild and re-upload `out/`.
-
-### PHP fallback (no Node available)
-
-If your host has **PHP but not Node**, you can accept the contact form with a
-tiny mail script instead of the Express API. Create `public_html/contact.php`:
-
-```php
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $data = json_decode(file_get_contents('php://input'), true);
-  $to = 'studio@gotchstudio.com';
-  $subject = 'New inquiry from gotchstudio.com';
-  $body = "Name: {$data['name']}\nEmail: {$data['email']}\n\n{$data['message']}";
-  mail($to, $subject, $body, "From: no-reply@gotchstudio.com");
-  http_response_code(201);
-  echo json_encode(['ok' => true]);
-}
+```bash
+npm ci
+npm run build
 ```
 
-Then point `ContactForm`'s submit at `/contact.php`.
+`output: "standalone"` puts a minimal server at `.next/standalone/server.js`.
+It does **not** copy static assets or `public/` automatically — do that once
+after each build:
 
-## 4. Custom domain & HTTPS
+```bash
+cp -r .next/static .next/standalone/.next/static
+cp -r public .next/standalone/public
+```
 
-Point `gotchstudio.com` at the host and enable **AutoSSL** (Let's Encrypt) in
-cPanel. Update `siteConfig.url` in `config/site.ts` if the production URL differs.
+Quick local smoke test (optional): `npm run start:standalone` then visit
+`http://localhost:3000`.
 
-## 5. Translations
+---
 
-`messages/en.json` is the complete authored source. The other locales contain
-professionally-phrased starter translations for high-visibility UI and **fall
-back to English** for any missing key (deep-merged in `i18n/request.ts`). Before
-launch, have the remaining keys professionally translated and drop them into the
-matching `messages/<locale>.json`.
+## 3. Run with PM2
 
-## 6. Performance & SEO checklist
+`ecosystem.config.cjs` is included. It runs one fork-mode instance on
+`127.0.0.1:3000` (the in-memory AI rate limiter assumes a single instance — see
+`lib/ai/rate-limit.ts` to move it to Redis if you scale out).
 
-- Images use Unsplash placeholders — replace with **optimized, licensed/shot
-  assets** (WebP/AVIF, properly sized) for best Lighthouse performance.
-- `metadataBase`, canonical, hreflang, OG/Twitter, JSON-LD (`LocalBusiness` +
-  `CreativeWork`), `sitemap.xml`, and `robots.txt` are all wired.
-- Add real OG images at `public/og/default.jpg` (1200×630).
+```bash
+pm2 start ecosystem.config.cjs
+pm2 save
+pm2 startup   # follow the printed command so PM2 survives reboots
+```
+
+PM2 inherits your shell environment; the standalone server also reads `.env` via
+Next at build/runtime. To be explicit, you can export the keys before
+`pm2 start`, or add an `env` block to the ecosystem file.
+
+---
+
+## 4. Nginx + TLS
+
+```bash
+sudo cp deploy/nginx.conf.example /etc/nginx/sites-available/gotchstudio
+sudo ln -s /etc/nginx/sites-available/gotchstudio /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+
+# TLS via Let's Encrypt
+sudo apt-get install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d gotchstudio.com -d www.gotchstudio.com
+```
+
+The provided Nginx config disables buffering on `/api/` so the concierge streams
+token-by-token, raises the body limit for image uploads, and sets a 180s timeout
+for image generation.
+
+---
+
+## 5. Updating
+
+```bash
+cd /var/www/gotchstudio
+git pull
+npm ci
+npm run build
+cp -r .next/static .next/standalone/.next/static
+cp -r public .next/standalone/public
+pm2 reload gotchstudio
+```
+
+---
+
+## Optional: database-backed forms
+
+Contact / newsletter / booking forms are UI placeholders by default. To persist
+submissions, use the Prisma schema in `prisma/` and the optional Express service
+in `server/` (see `server/README.md`), or add Next API routes that call Prisma.
+Set `DATABASE_URL` accordingly.
+
+---
+
+## Notes on the AI Studio
+
+- **Cost control is built in:** uploads are downscaled in the browser before
+  upload; every AI route is per-IP rate limited; image payloads are size-capped.
+- **Replicate model versions** change over time. If image generation starts
+  falling back to curated imagery, set a current `REPLICATE_VISUALIZE_MODEL` /
+  `REPLICATE_STAGE_MODEL` (`owner/name:version`) in `.env`.
+- **Keys are server-side only.** They are never bundled into client JavaScript —
+  all AI calls go through `app/api/*` routes.

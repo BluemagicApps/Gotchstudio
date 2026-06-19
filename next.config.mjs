@@ -4,19 +4,27 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Static export so the site can be uploaded directly to cPanel / shared hosting.
-  output: "export",
-  // Static export cannot use the on-demand Image Optimization server.
+  // Self-hosted on a VPS: emit a minimal standalone server bundle
+  // (.next/standalone/server.js) so PM2/systemd can run the app with the
+  // smallest possible footprint. See DEPLOYMENT.md.
+  output: "standalone",
+  // Running a real Node server means the built-in Image Optimization server is
+  // available again — keep remote sources allowlisted.
   images: {
-    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
+      // AI image-generation output (Replicate delivery CDNs).
+      { protocol: "https", hostname: "replicate.delivery" },
+      { protocol: "https", hostname: "*.replicate.delivery" },
     ],
   },
-  // Emit /about/index.html style folders so links work on static hosts.
-  trailingSlash: true,
   reactStrictMode: true,
+  // AI routes can stream for a while; allow generous body sizes for uploaded
+  // (downscaled) room photos sent as data URLs to the visualizer/staging tools.
+  experimental: {
+    serverActions: { bodySizeLimit: "8mb" },
+  },
 };
 
 export default withNextIntl(nextConfig);

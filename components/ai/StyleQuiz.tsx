@@ -1,13 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Copy, RotateCcw } from "lucide-react";
+import { Check, Copy, RotateCcw, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { designStyles } from "./styleData";
 import { cn } from "@/lib/utils";
+
+/** Mirrors the StyleProfile returned by /api/style-profile. */
+interface StyleProfile {
+  title: string;
+  tagline: string;
+  summary: string;
+  palette: { name: string; hex: string }[];
+  materials: string[];
+  rooms: { room: string; idea: string }[];
+  nextStep: string;
+}
 
 /** Quiz questions; each option maps to one or more style ids it favors. */
 const questions = [
@@ -54,24 +65,34 @@ type Phase = "intro" | "quiz" | "result";
 export function StyleQuiz() {
   const t = useTranslations("ai.quiz");
   const tm = useTranslations("ai.moodboard");
+  const tp = useTranslations("ai.profile");
   const [phase, setPhase] = useState<Phase>("intro");
   const [step, setStep] = useState(0);
   const [scores, setScores] = useState<Record<string, number>>({});
+  const [answers, setAnswers] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
+  const [profile, setProfile] = useState<StyleProfile | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(false);
+  // Guards against double-fetching the profile under React 18 strict effects.
+  const fetchedFor = useRef<string | null>(null);
 
-  function answer(styleIds: string[]) {
+  function answer(styleIds: string[], label: string) {
     setScores((prev) => {
       const next = { ...prev };
       styleIds.forEach((id) => (next[id] = (next[id] ?? 0) + 1));
       return next;
     });
+    setAnswers((prev) => [...prev, label]);
     if (step + 1 < questions.length) setStep(step + 1);
     else setPhase("result");
   }
 
   function reset() {
     setScores({});
+    setAnswers([]);
     setStep(0);
+    setProfile(null);
+    fetchedFor.current = null;
     setPhase("intro");
   }
 
@@ -79,6 +100,34 @@ export function StyleQuiz() {
     Object.entries(scores).sort((a, b) => b[1] - a[1])[0]?.[0] ??
     designStyles[0].id;
   const result = designStyles.find((s) => s.id === winner)!;
+
+  // Once the quiz resolves, ask Claude for a personalized style profile.
+  useEffect(() => {
+    if (phase !== "result" || fetchedFor.current === winner) return;
+    fetchedFor.current = winner;
+    setLoadingProfile(true);
+    setProfile(null);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/style-profile", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ styleId: winner, answers }),
+        });
+        const data = (await res.json()) as { profile?: StyleProfile };
+        if (!cancelled && data.profile) setProfile(data.profile);
+      } catch {
+        /* profile stays null; static result content still shows */
+      } finally {
+        if (!cancelled) setLoadingProfile(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, winner]);
 
   async function share() {
     try {
@@ -132,14 +181,12 @@ export function StyleQuiz() {
                 {step + 1}/{questions.length}
               </span>
             </div>
-            <p className="font-serif text-2xl font-light">
-              {questions[step].q}
-            </p>
+            <p className="font-serif text-2xl font-light">{questions[step].q}</p>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {questions[step].options.map((opt) => (
                 <button
                   key={opt.label}
-                  onClick={() => answer(opt.styles)}
+                  onClick={() => answer(opt.styles, opt.label)}
                   className="rounded-md border border-border px-5 py-4 text-left text-sm transition-colors hover:border-accent hover:bg-muted"
                 >
                   {opt.label}
@@ -158,13 +205,79 @@ export function StyleQuiz() {
           >
             <p className="eyebrow">{t("result")}</p>
             <h4 className="display-sm mt-2">
-              {t("yourStyle")} <span className="text-accent">{result.name}</span>
+              {t("yourStyle")}{" "}
+              <span className="text-accent">{profile?.title ?? result.name}</span>
             </h4>
-            <p className="mt-3 max-w-lg text-muted-foreground">
-              {result.description}
+            {profile?.tagline && (
+              <p className="mt-1 font-serif text-lg italic text-muted-foreground">
+                {profile.tagline}
+              </p>
+            )}
+
+            {/* AI-written summary (falls back to the static style description) */}
+            <p className="mt-3 max-w-xl text-muted-foreground">
+              {profile?.summary ?? result.description}
             </p>
 
-            {/* Moodboard */}
+            {loadingProfile && (
+              <p className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground">
+                <Sparkles className="h-4 w-4 animate-pulse text-accent" />
+                {tp("loading")}
+              </p>
+            )}
+
+            {profile && (
+              <div className="mt-8 grid gap-8 sm:grid-cols-2">
+                {/* Palette */}
+                <div>
+                  <p className="eyebrow mb-3">{tp("palette")}</p>
+                  <div className="flex flex-wrap gap-3">
+                    {profile.palette.map((c) => (
+                      <div key={c.hex} className="flex flex-col items-center gap-1">
+                        <span
+                          className="h-12 w-12 rounded-full border border-border"
+                          style={{ backgroundColor: c.hex }}
+                          title={`${c.name} ${c.hex}`}
+                        />
+                        <span className="text-[10px] text-muted-foreground">
+                          {c.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* Materials */}
+                <div>
+                  <p className="eyebrow mb-3">{tp("materials")}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.materials.map((m) => (
+                      <span
+                        key={m}
+                        className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground"
+                      >
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {profile && profile.rooms.length > 0 && (
+              <div className="mt-8">
+                <p className="eyebrow mb-3">{tp("rooms")}</p>
+                <ul className="space-y-3">
+                  {profile.rooms.map((r) => (
+                    <li key={r.room} className="text-sm">
+                      <span className="font-medium text-foreground">{r.room}.</span>{" "}
+                      <span className="text-muted-foreground">{r.idea}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Moodboard from curated style assets */}
             <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {result.moodboard.map((img) => (
                 <div
@@ -181,6 +294,12 @@ export function StyleQuiz() {
                 </div>
               ))}
             </div>
+
+            {profile?.nextStep && (
+              <p className="mt-6 max-w-xl text-sm text-foreground">
+                {profile.nextStep}
+              </p>
+            )}
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Button onClick={share} variant="accent">

@@ -217,24 +217,40 @@
   "ai": {
     "meta": {
       "title": "AI Studio — Gotch Studio",
-      "description": "Reimagine your space with the Gotch AI Studio: room visualizer, style quiz, and moodboard generator."
+      "description": "Reimagine your space with the Gotch AI Studio: room visualizer, virtual staging, a style quiz, and a live design concierge."
     },
     "hero": {
       "eyebrow": "Gotch AI Studio",
       "title": "Design intelligence, the Gotch way.",
-      "intro": "A suite of AI tools to explore your space, discover your aesthetic, and collaborate with our designers. These are interactive demos — your chosen direction is brought to life by our team with real materials."
+      "intro": "A suite of AI tools to reimagine your space, furnish it, discover your aesthetic, and talk through your project in real time — then collaborate with our designers to bring the chosen direction to life with real materials."
     },
     "visualizer": {
-      "title": "AI Room Visualizer",
-      "intro": "Upload a photo, floor plan, or sketch and preview it in our signature styles.",
-      "upload": "Upload your room",
-      "dragDrop": "Drag & drop or click to upload",
+      "title": "Room Visualizer",
+      "intro": "Upload a photo of your room and reimagine it in our signature styles.",
+      "dragDrop": "Drag & drop or click to upload a room photo",
       "chooseStyle": "Choose a style",
       "generate": "Generate redesign",
       "generating": "Reimagining your space…",
       "result": "Your reimagined space",
       "reset": "Try another",
-      "note": "Demo output uses curated reference imagery. Connect Replicate or Hugging Face for live generation."
+      "before": "Before",
+      "after": "After",
+      "error": "We couldn't generate that just now. Please try another photo or try again shortly.",
+      "note": "Tip: a bright, straight-on photo gives the best results. With a Replicate token connected this generates live; otherwise a curated reference is shown."
+    },
+    "staging": {
+      "title": "Virtual Staging",
+      "intro": "Upload an empty room and see it tastefully furnished in a signature style.",
+      "dragDrop": "Drag & drop or click to upload an empty room",
+      "chooseStyle": "Choose a style",
+      "generate": "Stage this room",
+      "generating": "Furnishing your space…",
+      "result": "Your staged space",
+      "reset": "Try another",
+      "before": "Empty",
+      "after": "Staged",
+      "error": "We couldn't stage that just now. Please try another photo or try again shortly.",
+      "note": "Best with a clear photo of an empty or near-empty room. With a Replicate token connected this generates live; otherwise a curated reference is shown."
     },
     "quiz": {
       "title": "Style Quiz",
@@ -246,6 +262,12 @@
       "retake": "Retake quiz",
       "yourStyle": "You lean"
     },
+    "profile": {
+      "loading": "Crafting your personalized profile…",
+      "palette": "Your palette",
+      "materials": "Materials to explore",
+      "rooms": "Ideas for your rooms"
+    },
     "moodboard": {
       "title": "Moodboard Generator",
       "intro": "Build and share a moodboard from your style profile.",
@@ -253,14 +275,23 @@
       "share": "Copy share link",
       "copied": "Link copied"
     },
+    "concierge": {
+      "title": "Design Concierge",
+      "intro": "Ask anything about our services, process, pricing, or how to begin — our AI concierge answers in real time.",
+      "placeholder": "Ask about services, process, or pricing…",
+      "send": "Send",
+      "welcome": "Hello! I'm the Gotch Studio concierge. Ask me about our services, process, or how to start your project.",
+      "error": "Sorry — I had trouble responding just now. Please try again, or reach us at studio@gotchstudio.com.",
+      "note": "Answers are AI-generated and grounded in Gotch Studio's services and process. For a tailored proposal, contact our team.",
+      "suggest1": "What services do you offer?",
+      "suggest2": "How does your process work?",
+      "suggest3": "Do you work internationally?"
+    },
     "more": {
-      "title": "Also in development",
-      "staging": "Virtual Staging",
-      "stagingDesc": "Furnish empty rooms instantly for listings and previews.",
+      "title": "On the roadmap",
       "viewer": "3D Walkthroughs",
       "viewerDesc": "Immersive 3D and 360° tours of proposed designs.",
-      "chatbot": "Design Concierge",
-      "chatbotDesc": "An AI assistant to answer questions and guide inquiries."
+      "soon": "Coming soon"
     }
   },
   "shop": {
@@ -338,7 +369,8 @@
     "welcome": "Hello! I'm the Gotch Studio concierge. How can I help you today?",
     "placeholder": "Ask about services, process, or pricing…",
     "send": "Send",
-    "disclaimer": "Demo assistant — connect the Claude API for live responses.",
+    "disclaimer": "AI concierge — grounded in our services & process.",
+    "error": "Sorry — I had trouble responding. Please try again or email studio@gotchstudio.com.",
     "suggest1": "What services do you offer?",
     "suggest2": "How does your process work?",
     "suggest3": "Do you work internationally?"
