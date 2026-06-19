@@ -1,20 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { SmartImage } from "@/components/shared/SmartImage";
 import { Reveal } from "@/components/shared/Reveal";
 import { shopItems, shopCategories } from "@/data/shop";
 import { cn } from "@/lib/utils";
 
+const PAGE_SIZE = 24;
+
 export function ShopGrid() {
   const t = useTranslations("shop");
   const [category, setCategory] = useState<string>("all");
+  const [visible, setVisible] = useState(PAGE_SIZE);
 
   const filtered =
     category === "all"
       ? shopItems
       : shopItems.filter((i) => i.category === category);
+
+  // Reset how many are shown when the category changes.
+  useEffect(() => {
+    setVisible(PAGE_SIZE);
+  }, [category]);
+
+  const shown = filtered.slice(0, visible);
 
   return (
     <div>
@@ -35,7 +45,7 @@ export function ShopGrid() {
       </div>
 
       <div className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((item, i) => (
+        {shown.map((item, i) => (
           <Reveal key={item.slug} delay={i % 3}>
             <article className="group">
               <div className="relative aspect-square overflow-hidden bg-muted">
@@ -69,6 +79,20 @@ export function ShopGrid() {
           </Reveal>
         ))}
       </div>
+
+      {visible < filtered.length && (
+        <div className="mt-14 flex flex-col items-center gap-3">
+          <p className="text-xs text-muted-foreground">
+            {t("showing", { shown: shown.length, total: filtered.length })}
+          </p>
+          <button
+            onClick={() => setVisible((v) => v + PAGE_SIZE)}
+            className="rounded-full border border-foreground px-6 py-2.5 text-sm tracking-wide transition-colors hover:bg-foreground hover:text-background"
+          >
+            {t("loadMore")}
+          </button>
+        </div>
+      )}
 
       <p className="mt-12 text-center text-xs text-muted-foreground">
         {t("item.note")}

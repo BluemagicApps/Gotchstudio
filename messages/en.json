@@ -328,6 +328,8 @@
       "intro": "A small, evolving collection of custom and sourced furnishings we love. Trade inquiries welcome."
     },
     "filters": { "all": "All" },
+    "loadMore": "Load more pieces",
+    "showing": "Showing {shown} of {total} pieces",
     "item": {
       "by": "By",
       "inquire": "Inquire to purchase",
