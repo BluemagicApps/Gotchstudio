@@ -26,7 +26,10 @@ export const hasReplicate = () => Boolean(process.env.REPLICATE_API_TOKEN);
  */
 export const REPLICATE_VISUALIZE_MODEL =
   process.env.REPLICATE_VISUALIZE_MODEL ||
-  "adirik/interior-design:76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38";
+  // Unpinned `owner/name` — the Replicate client resolves the latest version
+  // server-side, so this keeps working as the model is updated. Pin a specific
+  // `owner/name:version` via env for reproducibility if you prefer.
+  "adirik/interior-design";
 
 export const REPLICATE_STAGE_MODEL =
   process.env.REPLICATE_STAGE_MODEL || REPLICATE_VISUALIZE_MODEL;
