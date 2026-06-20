@@ -264,7 +264,7 @@ function ServiceContent({ slug, locale }: { slug: string; locale: Locale }) {
             <h2 className="display-sm">{t("bookTitle")}</h2>
             <p className="mt-4 text-muted-foreground">{t("bookIntro")}</p>
           </div>
-          <BookingWidget />
+          <BookingWidget service={slug} />
           <p className="mt-6 text-center text-sm text-muted-foreground">
             {t("orInquire")}{" "}
             <Link href="/contact" className="link-underline text-foreground">

@@ -1,12 +1,14 @@
-// Gotch Studio data model.
+// Gotch Studio data model + operational backend.
 //
-// The first deliverable ships with typed static data in /data, so this schema
-// is the documented upgrade path: run `npx prisma generate && npx prisma db push`
-// to create a local SQLite database, then progressively move /data reads and the
-// contact/newsletter/booking handlers over to Prisma.
+// Powers the site's backend: contact inquiries, consultation bookings, and
+// newsletter subscriptions, plus an append-only audit log and marketing
+// attribution capture. Run `npx prisma generate && npx prisma migrate deploy`
+// (or `db push` in dev) to create the database.
 //
-// To use Postgres (Supabase) or MySQL (PlanetScale) instead, change `provider`
-// and `url` below and adjust a few field types (e.g. enums) — see DEPLOYMENT.md.
+// Default datasource is SQLite (a single file — zero external services on a
+// VPS, trivially backed up). To use Postgres (Supabase/Neon) or MySQL
+// (PlanetScale) for scale, change `provider` + `url` below and re-run migrate;
+// the schema is otherwise portable (no SQLite-only features). See DEPLOYMENT.md.
 
 generator client {
   provider = "prisma-client-js"
@@ -17,24 +19,26 @@ datasource db {
   url      = env("DATABASE_URL") // e.g. "file:./gotch.db"
 }
 
+// ── Content (documented migration path from /data) ──────────────────────────
+
 model Project {
-  id          String         @id @default(cuid())
-  slug        String         @unique
-  title       String
-  location    String
-  country     String
-  year        Int
-  style       String
-  type        String
-  summary     String
-  story       String // JSON-encoded string[]
-  scope       String // JSON-encoded string[]
-  heroUrl     String
-  heroAlt     String
-  featured    Boolean        @default(false)
-  images      ProjectImage[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id        String         @id @default(cuid())
+  slug      String         @unique
+  title     String
+  location  String
+  country   String
+  year      Int
+  style     String
+  type      String
+  summary   String
+  story     String // JSON-encoded string[]
+  scope     String // JSON-encoded string[]
+  heroUrl   String
+  heroAlt   String
+  featured  Boolean        @default(false)
+  images    ProjectImage[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 }
 
 model ProjectImage {
@@ -69,6 +73,9 @@ model TeamMember {
   sort  Int    @default(0)
 }
 
+// ── Operational records (backend) ───────────────────────────────────────────
+
+/// Project inquiries from the contact form.
 model Inquiry {
   id        String   @id @default(cuid())
   name      String
@@ -78,27 +85,86 @@ model Inquiry {
   type      String?
   budget    String?
   message   String
-  status    String   @default("new") // new | contacted | won | archived
-  createdAt DateTime @default(now())
-}
-
-model NewsletterSubscriber {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  status    String   @default("new") // new | contacted | qualified | won | lost | archived
+  // Marketing attribution + audit context
+  source    String? // e.g. "contact-page", "service:residential"
   locale    String   @default("en")
-  confirmed Boolean  @default(false)
+  referrer  String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  ipHash    String? // salted hash, not raw IP (privacy)
+  userAgent String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([email])
 }
 
+/// Newsletter / marketing list with consent tracking.
+model NewsletterSubscriber {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  locale      String   @default("en")
+  status      String   @default("subscribed") // subscribed | unsubscribed
+  consentAt   DateTime @default(now())
+  source      String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  unsubToken  String   @unique @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+/// Consultation / appointment bookings.
 model Consultation {
   id        String   @id @default(cuid())
   name      String?
   email     String?
+  phone     String?
+  service   String? // service slug this booking is for, if any
   date      DateTime
   slot      String
   mode      String   @default("virtual") // virtual | in-studio
-  status    String   @default("requested") // requested | confirmed | cancelled
+  status    String   @default("requested") // requested | confirmed | completed | cancelled
+  notes     String?
+  source    String?
+  locale    String   @default("en")
+  ipHash    String?
+  userAgent String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // One booking per date+slot prevents double-booking a time.
+  @@unique([date, slot])
+  @@index([status])
+  @@index([date])
+  @@index([createdAt])
+}
+
+/// Append-only audit trail of backend actions (submissions, status changes, exports).
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String // e.g. "inquiry.create", "subscriber.create", "admin.export"
+  entity    String // "inquiry" | "subscriber" | "consultation" | "admin"
+  entityId  String?
+  status    String? // "ok" | "error" | "duplicate" | "conflict"
+  message   String?
+  metadata  String? // JSON-encoded details
+  actor     String   @default("public") // "public" | "admin"
+  ipHash    String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([entity])
+  @@index([action])
+  @@index([createdAt])
 }
 
 model User {

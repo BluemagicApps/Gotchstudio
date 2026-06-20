@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -30,7 +30,9 @@ const budgets = ["< $50k", "$50k–$150k", "$150k–$500k", "$500k+"];
  */
 export function ContactForm() {
   const t = useTranslations("contact.form");
+  const locale = useLocale();
   const [sent, setSent] = useState(false);
+  const [failed, setFailed] = useState(false);
   const {
     register,
     handleSubmit,
@@ -38,11 +40,18 @@ export function ContactForm() {
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   async function onSubmit(data: FormValues) {
-    // TODO: POST to /api/inquiry (see server/README.md). Mocked success.
-    await new Promise((r) => setTimeout(r, 800));
-    // eslint-disable-next-line no-console
-    console.info("Inquiry submitted (demo):", data);
-    setSent(true);
+    setFailed(false);
+    try {
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...data, locale, source: "contact-page" }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setSent(true);
+    } catch {
+      setFailed(true);
+    }
   }
 
   if (sent) {
@@ -99,9 +108,12 @@ export function ContactForm() {
       <Field label={t("message")} error={errors.message?.message}>
         <textarea rows={5} className={cn(inputCls, "resize-none")} {...register("message")} />
       </Field>
-      <Button type="submit" variant="accent" size="lg" disabled={isSubmitting}>
-        {isSubmitting ? t("sending") : t("submit")}
-      </Button>
+      <div className="flex items-center gap-4">
+        <Button type="submit" variant="accent" size="lg" disabled={isSubmitting}>
+          {isSubmitting ? t("sending") : t("submit")}
+        </Button>
+        {failed && <span className="text-sm text-red-500">{t("error")}</span>}
+      </div>
     </form>
   );
 }

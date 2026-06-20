@@ -4,17 +4,35 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import { mainNav } from "@/config/site";
+import { services } from "@/data/services";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MobileNav } from "./MobileNav";
+import { NavDropdown, type DropdownItem } from "./NavDropdown";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
   const t = useTranslations("nav");
   const tc = useTranslations("common");
+  const ta = useTranslations("ai");
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+
+  // Hover-dropdown contents for the two nav items that have sub-pages/tools.
+  const servicesItems: DropdownItem[] = services.map((s) => ({
+    label: s.title,
+    description: s.summary,
+    href: `/services/${s.slug}`,
+    icon: s.icon,
+  }));
+  const aiItems: DropdownItem[] = [
+    { label: ta("visualizer.title"), description: ta("visualizer.intro"), href: "/ai-studio#visualizer", icon: "Wand2" },
+    { label: ta("staging.title"), description: ta("staging.intro"), href: "/ai-studio#staging", icon: "Sofa" },
+    { label: ta("tour.title"), description: ta("tour.intro"), href: "/ai-studio#tour", icon: "Compass" },
+    { label: ta("quiz.title"), description: ta("quiz.intro"), href: "/ai-studio#quiz", icon: "Sparkles" },
+    { label: ta("concierge.title"), description: ta("concierge.intro"), href: "/ai-studio#concierge", icon: "MessageCircle" },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -47,6 +65,27 @@ export function Header() {
         <nav className="hidden items-center gap-7 lg:flex">
           {mainNav.map((item) => {
             const active = pathname.startsWith(item.href);
+            if (item.key === "services")
+              return (
+                <NavDropdown
+                  key={item.key}
+                  label={t(item.key)}
+                  href={item.href}
+                  active={active}
+                  items={servicesItems}
+                  columns={2}
+                />
+              );
+            if (item.key === "aiStudio")
+              return (
+                <NavDropdown
+                  key={item.key}
+                  label={t(item.key)}
+                  href={item.href}
+                  active={active}
+                  items={aiItems}
+                />
+              );
             return (
               <Link
                 key={item.key}

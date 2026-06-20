@@ -35,7 +35,8 @@
   "newsletter": {
     "placeholder": "Your email address",
     "submit": "Subscribe",
-    "success": "Welcome — please check your inbox to confirm."
+    "success": "Welcome — please check your inbox to confirm.",
+    "error": "Could not subscribe just now. Please try again."
   },
   "home": {
     "hero": {
@@ -375,8 +376,13 @@
       "intro": "Reserve a 60-minute virtual or in-studio session with one of our designers.",
       "selectDate": "Select a date",
       "selectTime": "Select a time",
+      "name": "Full name",
+      "email": "Email",
       "confirm": "Request this slot",
-      "confirmed": "Requested — we'll confirm by email."
+      "sending": "Requesting…",
+      "confirmed": "Requested — we'll confirm by email.",
+      "conflict": "That time was just booked. Please choose another slot.",
+      "error": "Something went wrong. Please try again or email us directly."
     }
   },
   "legal": {

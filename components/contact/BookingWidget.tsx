@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /**
- * Lightweight consultation booking mock. Generates the next 14 weekdays and a
- * set of time slots. Replace `confirm()` with a Calendly/Cal.com embed or a
- * POST to the Node API to persist a Consultation row.
+ * Consultation booking. Collects a date + time slot and the visitor's contact
+ * details, then POSTs to /api/consultation (which persists the appointment and
+ * prevents double-booking the same slot).
  */
 function nextWeekdays(count: number) {
   const days: Date[] = [];
@@ -24,12 +24,50 @@ function nextWeekdays(count: number) {
 
 const slots = ["9:00", "10:30", "13:00", "14:30", "16:00"];
 
-export function BookingWidget() {
+export function BookingWidget({ service }: { service?: string }) {
   const t = useTranslations("contact.booking");
+  const locale = useLocale();
   const [date, setDate] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
   const days = nextWeekdays(10);
+
+  const ready = Boolean(date && time && name.trim() && email.trim());
+
+  async function submit() {
+    if (!ready || busy) return;
+    setError(null);
+    setBusy(true);
+    try {
+      const res = await fetch("/api/consultation", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          service,
+          date,
+          slot: time,
+          locale,
+          source: service ? `service:${service}` : "booking-widget",
+        }),
+      });
+      if (res.status === 409) {
+        setError(t("conflict"));
+        return;
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setDone(true);
+    } catch {
+      setError(t("error"));
+    } finally {
+      setBusy(false);
+    }
+  }
 
   if (done) {
     return (
@@ -61,7 +99,7 @@ export function BookingWidget() {
               )}
             >
               <span className="text-xs uppercase">
-                {d.toLocaleDateString("en", { weekday: "short" })}
+                {d.toLocaleDateString(locale, { weekday: "short" })}
               </span>
               <span className="font-serif text-lg">{d.getDate()}</span>
             </button>
@@ -88,15 +126,32 @@ export function BookingWidget() {
         ))}
       </div>
 
-      <Button
-        onClick={() => setDone(true)}
-        disabled={!date || !time}
-        variant="accent"
-        size="lg"
-        className="mt-8"
-      >
-        {t("confirm")}
-      </Button>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <label className="block">
+          <span className="eyebrow mb-2 block">{t("name")}</span>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="h-11 w-full border-b border-border bg-transparent px-1 text-sm outline-none focus:border-accent"
+          />
+        </label>
+        <label className="block">
+          <span className="eyebrow mb-2 block">{t("email")}</span>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="h-11 w-full border-b border-border bg-transparent px-1 text-sm outline-none focus:border-accent"
+          />
+        </label>
+      </div>
+
+      <div className="mt-8 flex items-center gap-4">
+        <Button onClick={submit} disabled={!ready || busy} variant="accent" size="lg">
+          {busy ? t("sending") : t("confirm")}
+        </Button>
+        {error && <span className="text-sm text-red-500">{error}</span>}
+      </div>
     </div>
   );
 }
